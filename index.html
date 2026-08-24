@@ -1,0 +1,2971 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>ARBUZERS SECRETS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0a0a0a;
+            padding: 0;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: background 0.8s ease;
+        }
+
+        body.secret-bg {
+            background: #0a0a2a;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(ellipse at center, #1a0000 0%, #0a0a0a 70%);
+            transition: background 0.8s ease;
+            overflow: hidden;
+        }
+
+        body.secret-bg .bg-layer {
+            background: radial-gradient(ellipse at center, #0a0a2a 0%, #0a0a4a 70%);
+        }
+
+        .vhs-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                    rgba(0, 0, 0, 0.08) 0px,
+                    rgba(0, 0, 0, 0.08) 1px,
+                    rgba(255, 0, 0, 0.03) 1px,
+                    rgba(255, 0, 0, 0.03) 2px,
+                    rgba(0, 0, 0, 0.06) 2px,
+                    rgba(0, 0, 0, 0.06) 3px,
+                    rgba(0, 255, 0, 0.02) 3px,
+                    rgba(0, 255, 0, 0.02) 4px);
+            animation: vhsScan 8s linear infinite;
+            pointer-events: none;
+        }
+
+        .vhs-noise {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 0, 0, 0.06) 0%, transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(0, 255, 0, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(255, 0, 255, 0.03) 0%, transparent 40%);
+            animation: noisePulse 2.5s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        .vhs-noise::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.12"/></svg>');
+            background-size: 150px 150px;
+            animation: noiseMove 0.15s steps(3) infinite;
+            opacity: 0.9;
+        }
+
+        .vhs-glitch-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
+            animation: glitchLineMove 3s linear infinite;
+            pointer-events: none;
+        }
+
+        .vhs-glitch-line2 {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+            animation: glitchLineMove2 5s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glitchLineMove {
+            0% { top: 20%; opacity: 0; }
+            10% { opacity: 0.8; }
+            20% { top: 40%; opacity: 0; }
+            50% { top: 60%; opacity: 0.5; }
+            70% { top: 80%; opacity: 0; }
+            100% { top: 20%; opacity: 0; }
+        }
+
+        @keyframes glitchLineMove2 {
+            0% { top: 80%; opacity: 0; }
+            15% { opacity: 0.6; }
+            30% { top: 50%; opacity: 0; }
+            60% { top: 30%; opacity: 0.4; }
+            85% { top: 10%; opacity: 0; }
+            100% { top: 80%; opacity: 0; }
+        }
+
+        @keyframes vhsScan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes noisePulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.8; }
+        }
+
+        @keyframes noiseMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-6%, -6%); }
+        }
+
+        .interface-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .container {
+            width: 100%;
+            background: rgba(17, 17, 17, 0.95);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.15), inset 0 0 80px rgba(255, 0, 0, 0.03);
+            border: 1px solid #3a1a1a;
+            backdrop-filter: blur(3px);
+            max-height: none;
+            overflow-y: visible;
+            transition: all 0.8s ease;
+            position: relative;
+        }
+
+        body.secret-bg .container {
+            background: rgba(10, 10, 40, 0.95);
+            border-color: #1a1a4a;
+            box-shadow: 0 0 60px rgba(0, 0, 255, 0.15), inset 0 0 80px rgba(0, 0, 255, 0.03);
+        }
+
+        .title-wrapper {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1 {
+            display: inline-block;
+            font-size: 2.8rem;
+            letter-spacing: 2px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff1a1a 0%, #66ff66 50%, #ff1a1a 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 6s ease infinite;
+            text-shadow: 0 0 40px rgba(255, 0, 0, 0.15);
+            position: relative;
+            padding: 0 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .title-stripes {
+            position: relative;
+            display: inline-block;
+        }
+
+        .title-stripes::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 100%;
+            height: calc(100% + 10px);
+            background: repeating-linear-gradient(90deg,
+                    transparent 0px,
+                    transparent 0.6em,
+                    rgba(255, 255, 255, 0.06) 0.6em,
+                    rgba(255, 255, 255, 0.06) 0.65em,
+                    transparent 0.65em,
+                    transparent 1.2em,
+                    rgba(0, 255, 0, 0.04) 1.2em,
+                    rgba(0, 255, 0, 0.04) 1.25em,
+                    transparent 1.25em,
+                    transparent 1.8em);
+            pointer-events: none;
+            border-radius: 4px;
+            mix-blend-mode: overlay;
+        }
+
+        .title-glitch {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 0, 0, 0.02) 20%,
+                    transparent 40%,
+                    rgba(0, 255, 0, 0.02) 60%,
+                    transparent 80%);
+            pointer-events: none;
+            border-radius: 4px;
+            animation: titleGlitch 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlitch {
+            0% { opacity: 0; transform: translateX(0); }
+            25% { opacity: 0.5; transform: translateX(-3px); }
+            50% { opacity: 0; transform: translateX(3px); }
+            75% { opacity: 0.3; transform: translateX(-1px); }
+            100% { opacity: 0; transform: translateX(0); }
+        }
+
+        .title-sparkle {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 1.5rem;
+            color: #66ff66;
+            opacity: 0.4;
+            filter: drop-shadow(0 0 20px #66ff66);
+            animation: sparklePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sparklePulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+
+        .lock-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .lock-screen.slide-out {
+            opacity: 0;
+            transform: translateX(100px);
+            pointer-events: none;
+            height: 0;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .lock-screen label {
+            color: #ff4d4d;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+        }
+
+        .lock-screen input {
+            background: #1a1a1a;
+            border: 2px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 14px 24px;
+            width: 100%;
+            max-width: 280px;
+            font-size: 1.3rem;
+            text-align: center;
+            color: #ff9999;
+            outline: none;
+            transition: 0.3s;
+            letter-spacing: 3px;
+        }
+
+        .lock-screen input:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 35px rgba(102, 255, 102, 0.15);
+        }
+
+        .lock-screen button {
+            background: transparent;
+            border: 2px solid #ff1a1a;
+            color: #ff4d4d;
+            padding: 12px 44px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .lock-screen button:hover {
+            background: #ff1a1a;
+            color: #0a0a0a;
+            border-color: #66ff66;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .error-msg {
+            color: #ff3333;
+            font-size: 0.95rem;
+            min-height: 1.5rem;
+            margin-top: -10px;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .content {
+            display: none;
+            flex-direction: column;
+            gap: 30px;
+            animation: contentFadeIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            padding: 5px 0;
+        }
+
+        .content.active {
+            display: flex;
+        }
+
+        @keyframes contentFadeIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: tabSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        @keyframes tabSlideIn {
+            from { opacity: 0; transform: translateX(-40px) scale(0.98); }
+            to { opacity: 1; transform: translateX(0) scale(1); }
+        }
+
+        .intro-text {
+            background: #141010;
+            border-left: 6px solid #ff1a1a;
+            border-radius: 16px;
+            padding: 22px 26px;
+            color: #ffb3b3;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .intro-text::before {
+            content: "✦";
+            color: #ff4444;
+            position: absolute;
+            left: -14px;
+            top: 20px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 20px #ff4444;
+        }
+
+        .quote-card {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: #ffcccc;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .quote-card:hover {
+            border-color: #66ff66;
+            box-shadow: 0 0 30px rgba(102, 255, 102, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .quote-card::before {
+            content: "❝";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 2rem;
+            color: #ff4444;
+        }
+
+        .quote-card .quote-text {
+            padding-left: 30px;
+        }
+
+        .record {
+            background: #141010;
+            border-left: 6px solid #ff1a1a;
+            border-radius: 16px;
+            padding: 22px 26px;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.05);
+            color: #ffb3b3;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        .record::before {
+            content: "✦";
+            color: #66ff66;
+            position: absolute;
+            left: -14px;
+            top: 20px;
+            font-size: 1.6rem;
+            text-shadow: 0 0 20px #66ff66;
+        }
+
+        .record strong {
+            color: #ff6666;
+            font-weight: 600;
+        }
+
+        .poll-section {
+            margin-top: 20px;
+            padding: 24px 20px 20px;
+            border-top: 2px solid #1f1a1a;
+            border-radius: 16px;
+            background: rgba(20, 16, 16, 0.6);
+            text-align: center;
+        }
+
+        .poll-question {
+            color: #ffb3b3;
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .poll-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .poll-btn {
+            padding: 12px 36px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1px;
+            min-width: 100px;
+        }
+
+        .poll-btn-yes {
+            background: #1a3a8a;
+            color: #aaccff;
+            box-shadow: 0 0 25px rgba(50, 100, 255, 0.2);
+        }
+
+        .poll-btn-yes:hover {
+            background: #2a5acc;
+            transform: scale(1.08);
+            box-shadow: 0 0 50px rgba(50, 100, 255, 0.4);
+        }
+
+        .poll-btn-no {
+            background: #5a1a1a;
+            color: #ff7777;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+        }
+
+        .poll-btn-no:hover {
+            background: #8a2a2a;
+            transform: scale(1.08);
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
+        }
+
+        .poll-btn.selected-yes {
+            background: #3a7aff;
+            color: #ffffff;
+            box-shadow: 0 0 60px rgba(50, 100, 255, 0.6);
+            border: 2px solid #66ff66;
+        }
+
+        .poll-btn.selected-no {
+            background: #cc3333;
+            color: #ffffff;
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.6);
+            border: 2px solid #ff3333;
+        }
+
+        .poll-result {
+            margin-top: 16px;
+            color: #888;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
+
+        .poll-result span {
+            color: #ffb3b3;
+            font-weight: 600;
+        }
+
+        .poll-error-msg {
+            margin-top: 14px;
+            color: #ff3333;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .comments-section {
+            margin-top: 20px;
+            padding: 24px 20px 20px;
+            border-top: 2px solid #1f1a1a;
+            border-radius: 16px;
+            background: rgba(20, 16, 16, 0.6);
+        }
+
+        .comments-title {
+            color: #ffb3b3;
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .comments-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+            padding-right: 8px;
+        }
+
+        .comment-item {
+            background: rgba(26, 26, 26, 0.6);
+            border-left: 3px solid #ff4d4d;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            color: #cc9999;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .comment-item .comment-time {
+            color: #666;
+            font-size: 0.75rem;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .comment-input-area {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .comment-input-area input {
+            flex: 1;
+            min-width: 150px;
+            background: #1a1a1a;
+            border: 1px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 10px 18px;
+            color: #ffb3b3;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .comment-input-area input:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.1);
+        }
+
+        .comment-input-area input::placeholder {
+            color: #555;
+        }
+
+        .comment-input-area button {
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 10px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .comment-input-area button:hover {
+            background: #ff4d4d;
+            color: #0a0a0a;
+            border-color: #66ff66;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+        }
+
+        .comment-empty {
+            color: #444;
+            text-align: center;
+            font-size: 0.9rem;
+            padding: 10px 0;
+        }
+
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 280px;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            border-left: 2px solid #ff4444;
+            z-index: 10001;
+            transition: right 0.4s ease;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .side-menu::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .side-menu::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+
+        .side-menu::-webkit-scrollbar-thumb {
+            background: #ff4444;
+            border-radius: 4px;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        .side-menu h3 {
+            color: #ff4444;
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a1a1a;
+            flex-shrink: 0;
+        }
+
+        .menu-item {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+        }
+
+        .menu-item:hover {
+            background: #ff4444;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+            transform: translateX(-5px);
+        }
+
+        .menu-item.active {
+            background: #ff4444;
+            color: #0a0a0a;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+        }
+
+        .menu-overlay.active {
+            display: block;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn.visible {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff4444;
+            border-radius: 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn.visible {
+            display: flex;
+        }
+
+        .menu-btn:hover {
+            background: #ff4444;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .menu-btn .line {
+            width: 24px;
+            height: 3px;
+            background: #fff;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        .menu-btn.open .line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-btn.open .line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-btn.open .line:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== СЕКРЕТНАЯ КОМНАТА ===== */
+        .secret-room-tab {
+            display: none;
+            flex-direction: column;
+            gap: 25px;
+            padding: 20px 0;
+            animation: secretFadeIn 0.8s ease;
+        }
+
+        .secret-room-tab.active {
+            display: flex;
+        }
+
+        @keyframes secretFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .secret-room-tab .secret-title {
+            font-size: 2rem;
+            font-weight: 900;
+            text-align: center;
+            background: linear-gradient(135deg, #b366ff, #7a4dff, #4d4dff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 60px rgba(102, 51, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .secret-room-tab .secret-text {
+            background: rgba(30, 20, 50, 0.6);
+            border-left: 6px solid #7a4dff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            color: #c9b3ff;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            box-shadow: 0 0 40px rgba(102, 51, 255, 0.05);
+            text-align: justify;
+        }
+
+        .secret-room-tab .secret-poll {
+            background: rgba(30, 20, 50, 0.4);
+            border-radius: 16px;
+            padding: 24px 20px;
+            text-align: center;
+            border: 1px solid #3a2a6a;
+        }
+
+        .secret-room-tab .secret-poll .poll-question {
+            color: #c9b3ff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .secret-room-tab .secret-poll .poll-buttons {
+            gap: 30px;
+        }
+
+        .secret-room-tab .secret-poll .poll-btn {
+            min-width: 140px;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .secret-poll-btn-yes {
+            background: #1a2a6a;
+            color: #aaccff;
+            box-shadow: 0 0 30px rgba(50, 50, 255, 0.2);
+        }
+
+        .secret-poll-btn-yes:hover:not(:disabled) {
+            background: #2a4a9a;
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(50, 50, 255, 0.4);
+        }
+
+        .secret-poll-btn-no {
+            background: #4a1a4a;
+            color: #ff99cc;
+            box-shadow: 0 0 30px rgba(200, 50, 255, 0.2);
+        }
+
+        .secret-poll-btn-no:hover:not(:disabled) {
+            background: #6a2a6a;
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(200, 50, 255, 0.4);
+        }
+
+        .secret-poll-btn.selected-yes {
+            background: #3a5aff;
+            color: #fff;
+            border-color: #66ff66;
+            box-shadow: 0 0 60px rgba(50, 100, 255, 0.6);
+        }
+
+        .secret-poll-btn.selected-no {
+            background: #aa33aa;
+            color: #fff;
+            border-color: #ff66ff;
+            box-shadow: 0 0 60px rgba(200, 50, 255, 0.6);
+        }
+
+        .secret-poll-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
+        .secret-poll-result {
+            margin-top: 16px;
+            color: #8877aa;
+            font-size: 1rem;
+        }
+
+        .secret-poll-result span {
+            color: #c9b3ff;
+            font-weight: 600;
+        }
+
+        .secret-access {
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .secret-access input {
+            background: #1a1a1a;
+            border: 1px solid #2a1a1a;
+            border-radius: 50px;
+            padding: 8px 16px;
+            width: 150px;
+            font-size: 1rem;
+            text-align: center;
+            color: #ff9999;
+            outline: none;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .secret-access input:focus {
+            border-color: #7a4dff;
+            box-shadow: 0 0 20px rgba(122, 77, 255, 0.1);
+        }
+
+        .secret-access button {
+            background: transparent;
+            border: 1px solid #3a1a3a;
+            color: #666;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+
+        .secret-access button:hover {
+            border-color: #7a4dff;
+            color: #b366ff;
+        }
+
+        .secret-access .secret-error {
+            color: #ff3333;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            min-height: 1.2rem;
+        }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .footer-note {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #4a2a2a;
+            letter-spacing: 2px;
+            border-top: 1px solid #1f1a1a;
+            padding-top: 18px;
+        }
+
+        .footer-note span {
+            background: linear-gradient(135deg, #ff1a1a, #66ff66);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .clicker-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .clicker-btn {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4444 0%, #8a1a1a 70%);
+            border: 4px solid #ff6666;
+            color: white;
+            font-size: 3rem;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.4);
+            margin: 20px auto;
+            display: block;
+        }
+
+        .clicker-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(255, 0, 0, 0.6);
+        }
+
+        .clicker-btn:active {
+            transform: scale(0.95);
+        }
+
+        .clicker-stats {
+            font-size: 1.5rem;
+            color: #ff6666;
+            margin: 15px 0;
+        }
+
+        .clicker-upgrade {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 8px;
+        }
+
+        .clicker-upgrade:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .clicker-upgrade:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .game-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+
+        .game-cell {
+            width: 90px;
+            height: 90px;
+            background: #1a1a1a;
+            border: 2px solid #ff4444;
+            border-radius: 12px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-cell:hover {
+            background: #2a0000;
+        }
+
+        .game-cell.win {
+            background: #2a2a00;
+            border-color: #66ff66;
+            box-shadow: 0 0 30px rgba(102, 255, 102, 0.4);
+        }
+
+        .game-score {
+            font-size: 1.5rem;
+            color: #ff6666;
+            margin: 15px 0;
+        }
+
+        .game-reset {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .game-reset:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .daily-quote {
+            background: linear-gradient(135deg, #ff4444, #8a1a1a);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+        }
+
+        .daily-quote span {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .profile-card {
+            background: #141010;
+            border: 2px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            color: #ffb3b3;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .profile-card h3 {
+            color: #ff4444;
+            margin-bottom: 10px;
+        }
+
+        .profile-input {
+            background: #1a1a1a;
+            border: 2px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 12px 24px;
+            width: 100%;
+            max-width: 300px;
+            font-size: 1.1rem;
+            text-align: center;
+            color: #ff9999;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .profile-input:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 35px rgba(102, 255, 102, 0.15);
+        }
+
+        .profile-btn {
+            background: transparent;
+            border: 2px solid #ff1a1a;
+            color: #ff4d4d;
+            padding: 12px 44px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .profile-btn:hover {
+            background: #ff1a1a;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+        }
+
+        .profile-info {
+            font-size: 1.1rem;
+            color: #ff9999;
+            margin-top: 15px;
+        }
+
+        .profile-info span {
+            color: #66ff66;
+            font-weight: 700;
+        }
+
+        .transfer-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 16px;
+            border: 1px solid #ff4444;
+            text-align: center;
+        }
+
+        .transfer-section h4 {
+            color: #ff4444;
+            margin-bottom: 15px;
+        }
+
+        .transfer-input {
+            background: #1a1a1a;
+            border: 2px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 10px 18px;
+            width: 100%;
+            max-width: 250px;
+            font-size: 1rem;
+            text-align: center;
+            color: #ff9999;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .transfer-input:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 25px rgba(102, 255, 102, 0.1);
+        }
+
+        .transfer-btn {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .transfer-btn:hover {
+            background: #ff4444;
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+        }
+
+        .transfer-status {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #ff9999;
+        }
+
+        .history-item {
+            background: rgba(20, 20, 20, 0.9);
+            border-left: 6px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: #ffcccc;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .history-item strong {
+            color: #ff4444;
+        }
+
+        .shop-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .skin-card {
+            background: #141010;
+            border: 2px solid #ff4444;
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skin-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .skin-card .skin-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .skin-card .skin-name {
+            color: #ffcccc;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skin-card .skin-price {
+            color: #ff6666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .skin-card.owned {
+            border-color: #66ff66;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.3);
+        }
+
+        .skin-card.selected {
+            background: #2a1a1a;
+            border-color: #ff4444;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .skin-card .buy-btn {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .skin-card .buy-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .leaderboard-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .leaderboard-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding: 10px;
+            background: #141010;
+            border-radius: 16px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            border-bottom: 1px solid #2a2a2a;
+            color: #ffcccc;
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-item .rank {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #ff4444;
+        }
+
+        .leaderboard-item .name {
+            flex: 1;
+            text-align: left;
+            margin-left: 15px;
+        }
+
+        .leaderboard-item .score {
+            font-weight: 700;
+            color: #66ff66;
+        }
+
+        .admin-panel {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .admin-panel h2 {
+            color: #ff4444;
+            margin-bottom: 25px;
+        }
+
+        .admin-form {
+            background: #141010;
+            border: 1px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .admin-form h3 {
+            color: #ff6666;
+            margin-bottom: 15px;
+        }
+
+        .admin-form input,
+        .admin-form textarea {
+            background: #1a1a1a;
+            border: 1px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 10px 18px;
+            width: 100%;
+            max-width: 250px;
+            font-size: 1rem;
+            color: #ff9999;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .admin-form textarea {
+            border-radius: 12px;
+            max-width: 400px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .admin-form input:focus,
+        .admin-form textarea:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.1);
+        }
+
+        .admin-form button {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 5px;
+        }
+
+        .admin-form button:hover {
+            background: #ff4444;
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+        }
+
+        .admin-users-table {
+            background: #141010;
+            border: 1px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-users-table h3 {
+            color: #ff6666;
+            margin-bottom: 15px;
+        }
+
+        .admin-users-table #usersList {
+            max-height: 300px;
+            overflow-y: auto;
+            color: #ffcccc;
+            text-align: left;
+            padding: 10px;
+        }
+
+        .admin-users-table button {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .admin-users-table button:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .post-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .post-controls button {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .post-controls button:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .post-controls span {
+            color: #ffcccc;
+            font-size: 1.1rem;
+        }
+
+        .post-card {
+            background: #141010;
+            border: 2px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .post-card .post-content {
+            color: #ffcccc;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            padding: 15px 0;
+            min-height: 100px;
+        }
+
+        .post-card button {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px 5px;
+        }
+
+        .post-card button:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        .post-comments {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #2a1a1a;
+        }
+
+        .post-comments input {
+            background: #1a1a1a;
+            border: 1px solid #3a1a1a;
+            border-radius: 50px;
+            padding: 10px 18px;
+            width: 100%;
+            max-width: 300px;
+            color: #ff9999;
+            outline: none;
+            margin: 10px 0;
+        }
+
+        .post-comments input:focus {
+            border-color: #66ff66;
+        }
+
+        .is-mobile .interface-wrapper {
+            max-width: 100%;
+            padding: 5px;
+        }
+
+        .is-mobile .container {
+            padding: 15px 10px;
+            border-radius: 12px;
+            max-height: none;
+        }
+
+        .is-mobile h1 {
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .is-mobile .record,
+        .is-mobile .quote-card,
+        .is-mobile .intro-text,
+        .is-mobile .history-item {
+            font-size: 0.9rem;
+            padding: 12px 10px;
+            border-left-width: 3px;
+        }
+
+        .is-mobile .poll-btn {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            min-width: 70px;
+        }
+
+        .is-mobile .poll-question {
+            font-size: 0.9rem;
+        }
+
+        .is-mobile .comment-input-area input {
+            min-width: 100px;
+            font-size: 0.85rem;
+            padding: 8px 14px;
+        }
+
+        .is-mobile .comment-input-area button {
+            padding: 8px 18px;
+            font-size: 0.85rem;
+        }
+
+        .is-mobile .secret-room-tab .secret-title {
+            font-size: 1.2rem;
+        }
+
+        .is-mobile .secret-room-tab .secret-text {
+            font-size: 0.9rem;
+            padding: 14px;
+        }
+
+        .is-mobile .lock-screen input {
+            max-width: 180px;
+            font-size: 1rem;
+            padding: 10px 14px;
+        }
+
+        .is-mobile .lock-screen button {
+            padding: 8px 30px;
+            font-size: 1rem;
+        }
+
+        .is-mobile .back-btn {
+            top: 5px;
+            left: 5px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .is-mobile .menu-btn {
+            top: 10px;
+            right: 10px;
+            padding: 8px 10px;
+        }
+
+        .is-mobile .menu-btn .line {
+            width: 20px;
+            height: 2px;
+        }
+
+        .is-mobile .side-menu {
+            width: 250px;
+            padding: 15px;
+        }
+
+        .is-mobile .menu-item {
+            padding: 10px 14px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .is-mobile .clicker-btn {
+            width: 120px;
+            height: 120px;
+            font-size: 2.5rem;
+        }
+
+        .is-mobile .game-cell {
+            width: 60px;
+            height: 60px;
+            font-size: 1.8rem;
+        }
+
+        .is-mobile .shop-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .is-mobile .leaderboard-item {
+            font-size: 0.9rem;
+            padding: 10px 12px;
+        }
+
+        input[type="password"] {
+            letter-spacing: 4px;
+        }
+
+        input[type="password"]::placeholder {
+            letter-spacing: 2px;
+        }
+
+        /* Стили для FNAF */
+        .fnaf-error-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 99998;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fnafFlicker 0.15s ease 5;
+            pointer-events: none;
+        }
+
+        .fnaf-error-screen h2 {
+            color: #ff0000;
+            font-size: 4rem;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 60px rgba(255, 0, 0, 0.5);
+            letter-spacing: 8px;
+            animation: errorPulse 0.5s ease-in-out infinite alternate;
+        }
+
+        .fnaf-error-screen p {
+            color: #aa0000;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+            opacity: 0.8;
+            letter-spacing: 3px;
+        }
+
+        @keyframes fnafFlicker {
+            0%,
+            100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes errorPulse {
+            0% { opacity: 0.6; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .flash-error {
+            animation: flashRed 0.3s ease 3;
+        }
+
+        @keyframes flashRed {
+            0%,
+            100% { background-color: transparent; }
+            50% { background-color: rgba(255, 0, 0, 0.15); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer">
+        <div class="vhs-overlay"></div>
+        <div class="vhs-noise"></div>
+        <div class="vhs-glitch-line"></div>
+        <div class="vhs-glitch-line2"></div>
+    </div>
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <button class="back-btn" id="backBtn">← Назад</button>
+    <button class="menu-btn" id="menuBtn">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+    </button>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <div class="side-menu" id="sideMenu">
+        <h3>📂 РАЗДЕЛЫ</h3>
+        <button class="menu-item active" data-tab="home">🏠 Главная</button>
+        <button class="menu-item" data-tab="facts">📜 Факты</button>
+        <button class="menu-item" data-tab="opinions">💭 Мнения</button>
+        <button class="menu-item" data-tab="history">📖 История</button>
+        <button class="menu-item" data-tab="community">💬 Обсуждение</button>
+        <button class="menu-item" data-tab="clicker">🍉 Кликер</button>
+        <button class="menu-item" data-tab="leaders">🏆 Лидеры</button>
+        <button class="menu-item" data-tab="shop">🛒 Магазин</button>
+        <button class="menu-item" data-tab="game">🎮 Мини-игра</button>
+        <button class="menu-item" data-tab="profile">👤 Профиль</button>
+        <button class="menu-item" data-tab="posts">📝 Посты</button>
+        <button class="menu-item" data-tab="admin">🛠️ Админ-панель</button>
+    </div>
+
+    <div class="interface-wrapper">
+        <div class="container" id="app">
+
+            <div class="title-wrapper" id="titleWrapper">
+                <div class="title-stripes">
+                    <h1>🍉 ARBUZERS SECRETS</h1>
+                    <div class="title-glitch"></div>
+                </div>
+                <div class="title-sparkle">✦</div>
+            </div>
+
+            <!-- ЭКРАН ВХОДА -->
+            <div class="lock-screen" id="lockScreen">
+                <label>🔐 ВВЕДИТЕ ПАРОЛЬ</label>
+                <input type="password" id="passwordInput" placeholder="• • • •" maxlength="10" autofocus />
+                <button id="unlockBtn">ВОЙТИ</button>
+                <div class="error-msg" id="errorMsg"></div>
+            </div>
+
+            <!-- ОСНОВНОЙ КОНТЕНТ -->
+            <div class="content" id="contentArea">
+
+                <!-- ГЛАВНАЯ -->
+                <div class="tab-content active" id="tab-home">
+                    <div class="intro-text">
+                        <strong>Это - официальный сайт Арбузеров.</strong><br />
+                        Здесь будут выходить все важное, что не может попасть в канал. Здесь будут выходить закрытые мнения, интересные факты, а также самые страшные секреты. Но и кроме этого этот сайт будет сайтом развлечения! Код получат лишь те, кому можно довериться.
+                    </div>
+
+                    <div class="daily-quote" id="dailyQuote">
+                        <strong id="quoteText">"Арбузеры - не плохие, просто у них своя философия"</strong>
+                        <span>Цитата дня</span>
+                    </div>
+
+                    <div class="poll-section" id="pollSection">
+                        <div class="poll-question">
+                            ❓ Считаете ли вы Арбузеров достойными рейдерами, и есть ли у них будущее?
+                        </div>
+                        <div class="poll-buttons">
+                            <button class="poll-btn poll-btn-yes" id="pollYes">✅ ДА</button>
+                            <button class="poll-btn poll-btn-no" id="pollNo">❌ НЕТ</button>
+                        </div>
+                        <div class="poll-result" id="pollResult">
+                            Голосов: <span id="pollCountYes">0</span> ✅ · <span id="pollCountNo">0</span> ❌
+                        </div>
+                        <div class="poll-error-msg" id="pollError"></div>
+                    </div>
+
+                    <!-- ВХОД В СЕКРЕТНУЮ КОМНАТУ -->
+                    <div class="secret-access">
+                        <input type="password" id="secretPasswordInput" placeholder="🔮 Код" maxlength="4" />
+                        <button id="secretAccessBtn">🔓 Войти</button>
+                        <div class="secret-error" id="secretAccessError"></div>
+                    </div>
+                </div>
+
+                <!-- ФАКТЫ -->
+                <div class="tab-content" id="tab-facts">
+                    <div class="record">
+                        <strong>Факт первый:</strong><br />
+                        "Арбузеры - рейд клан существоваший очень давно, но лишь в голове создателя. Уже после месяца нахождения в uotb, он понял, что совершил ошибку, но долго не мог уйти. В конечном итоге повернулся случай, и идея реализовалась"
+                    </div>
+                    <div class="record">
+                        <strong>Факт второй:</strong><br />
+                        "Арбузеры - рейдеры, ни чёрные, ни белые. Список у Арбузеров не имеется лишь потому, что это бессмысленно. Если рейд не будет уголовно наказуем - мы беремся за дело"
+                    </div>
+                    <div class="quote-card">
+                        <div class="quote-text">"Арбузеры - не плохие, просто у них своя философия"</div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="quote-text">"Арбузеры, как настоящие арбузы, только пытаться есть их - опасно для канала/чата"</div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="quote-text">"Если ты читаешь это, значит тебе сегодня повезёт"</div>
+                    </div>
+                </div>
+
+                <!-- МНЕНИЯ -->
+                <div class="tab-content" id="tab-opinions">
+                    <div class="record">
+                        <strong>Мнение третье:</strong><br />
+                        "Арбузеры с трудом поддерживают идею KR, ведь для них - они были стержнем. Арбузеры ещё достаточное время будут именно РЕЙДЕРАМИ, а после мы уже решим наше будущее"
+                    </div>
+                </div>
+
+                <!-- ИСТОРИЯ -->
+                <div class="tab-content" id="tab-history">
+                    <div class="history-item">
+                        <strong>Начало:</strong><br />
+                        "Арбузеры - рейд клан существоваший очень давно, но лишь в голове создателя. Уже после месяца нахождения в uotb, он понял, что совершил ошибку, но долго не мог уйти. В конечном итоге повернулся случай, и идея реализовалась"
+                    </div>
+                </div>
+
+                <!-- ОБСУЖДЕНИЕ -->
+                <div class="tab-content" id="tab-community">
+                    <div class="comments-section">
+                        <div class="comments-title">💬 Обсуждение комьюнити</div>
+                        <div class="comments-list" id="commentsList">
+                            <div class="comment-empty">Пока нет комментариев. Будьте первым!</div>
+                        </div>
+                        <div class="comment-input-area">
+                            <input type="text" id="commentInput" placeholder="Напишите что-нибудь..." maxlength="200" />
+                            <button id="commentBtn">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КЛИКЕР -->
+                <div class="tab-content" id="tab-clicker">
+                    <div class="clicker-section">
+                        <h3 style="color:#ff4444; margin-bottom:20px;">🍉 КЛИКЕР АРБУЗА</h3>
+                        <div class="clicker-stats">
+                            <strong id="clickerMoney">0</strong> 🍉
+                        </div>
+                        <button class="clicker-btn" id="clickerBtn">🍉</button>
+                        <div class="clicker-stats" id="clickerPerClick">+1 за клик</div>
+                        <div>
+                            <button class="clicker-upgrade" id="upgradeClick">⬆️ Улучшить клик (+1) - 50🍉</button>
+                            <button class="clicker-upgrade" id="upgradeAuto">🤖 Автоклик (1/сек) - 100🍉</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ЛИДЕРЫ -->
+                <div class="tab-content" id="tab-leaders">
+                    <div class="leaderboard-section">
+                        <h3 style="color:#ff4444; margin-bottom:20px;">🏆 ТАБЛИЦА ЛИДЕРОВ</h3>
+                        <div class="leaderboard-list" id="leaderboardList">
+                            <div class="comment-empty">Загрузка...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- МАГАЗИН СКИНОВ -->
+                <div class="tab-content" id="tab-shop">
+                    <div class="shop-section">
+                        <h3 style="color:#ff4444; margin-bottom:20px;">🛒 МАГАЗИН СКИНОВ</h3>
+                        <div class="shop-grid" id="shopGrid">
+                            <div class="skin-card" data-skin="арбуз" data-price="0">
+                                <div class="skin-icon">🍉</div>
+                                <div class="skin-name">Арбуз</div>
+                                <div class="skin-price">Бесплатно</div>
+                                <button class="buy-btn" data-skin="арбуз">Выбрать</button>
+                            </div>
+                            <div class="skin-card" data-skin="голубика" data-price="100">
+                                <div class="skin-icon">🫐</div>
+                                <div class="skin-name">Голубика</div>
+                                <div class="skin-price">100🍉</div>
+                                <button class="buy-btn" data-skin="голубика">Купить</button>
+                            </div>
+                            <div class="skin-card" data-skin="ананас" data-price="150">
+                                <div class="skin-icon">🍍</div>
+                                <div class="skin-name">Ананас</div>
+                                <div class="skin-price">150🍉</div>
+                                <button class="buy-btn" data-skin="ананас">Купить</button>
+                            </div>
+                            <div class="skin-card" data-skin="клубника" data-price="200">
+                                <div class="skin-icon">🍓</div>
+                                <div class="skin-name">Клубника</div>
+                                <div class="skin-price">200🍉</div>
+                                <button class="buy-btn" data-skin="клубника">Купить</button>
+                            </div>
+                            <div class="skin-card" data-skin="моника" data-price="500">
+                                <div class="skin-icon">🍎</div>
+                                <div class="skin-name">Яблоко с лицом Моники</div>
+                                <div class="skin-price">500🍉</div>
+                                <button class="buy-btn" data-skin="моника">Купить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- МИНИ-ИГРА -->
+                <div class="tab-content" id="tab-game">
+                    <div class="game-section">
+                        <h3 style="color:#ff4444; margin-bottom:20px;">🎮 НАЙДИ АРБУЗ</h3>
+                        <div class="game-score">Счёт: <strong id="gameScore">0</strong></div>
+                        <div class="game-grid" id="gameGrid">
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                            <button class="game-cell"></button>
+                        </div>
+                        <button class="game-reset" id="gameReset">🔄 Новая игра</button>
+                    </div>
+                </div>
+
+                <!-- ПОСТЫ -->
+                <div class="tab-content" id="tab-posts">
+                    <div class="post-feed">
+                        <div class="post-controls">
+                            <button id="prevPost">←</button>
+                            <span id="postCounter">1 / 1</span>
+                            <button id="nextPost">→</button>
+                        </div>
+
+                        <div class="post-card">
+                            <div class="post-content">
+                                <p id="postText">Пожалуйста, первый пост!</p>
+                            </div>
+
+                            <button id="openComments">💬 Открыть комментарии</button>
+
+                            <div class="post-comments" id="postComments" style="display: none;">
+                                <div id="commentsList"></div>
+                                <input type="text" id="commentInput" placeholder="Напишите комментарий..." />
+                                <button id="commentBtn">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ПРОФИЛЬ -->
+                <div class="tab-content" id="tab-profile">
+                    <div class="profile-card">
+                        <h3>👤 Создание профиля</h3>
+                        <input type="text" id="profileName" class="profile-input" placeholder="Введите имя" maxlength="20" />
+                        <button class="profile-btn" id="saveProfileBtn">Сохранить профиль</button>
+                        <div class="profile-info" id="profileInfo">
+                            <span id="profileDisplay">Профиль не создан</span>
+                        </div>
+                    </div>
+
+                    <div class="transfer-section">
+                        <h4>💱 Обмен валюты</h4>
+                        <input type="text" id="transferName" class="transfer-input" placeholder="Имя получателя" maxlength="20" />
+                        <input type="number" id="transferAmount" class="transfer-input" placeholder="Сумма 🍉" min="1" />
+                        <button class="transfer-btn" id="transferBtn">Перевести</button>
+                        <div class="transfer-status" id="transferStatus"></div>
+                    </div>
+                </div>
+
+                <!-- СЕКРЕТНАЯ КОМНАТА -->
+                <div class="tab-content" id="tab-secret">
+                    <div class="secret-room-tab">
+                        <div class="secret-title">💜 СООБЩЕНИЕ ДЛЯ ПОЛЬЗОВАТЕЛЯ</div>
+                        <div class="secret-text">
+                            Пользователь, ты наверное знаешь, что Кузя никогда особо не пытался делать какое-то добро. Я не знаю, откуда взялись термин белые и чёрные рейдеры, но твоё решение ударило мне прям в сердце. Не надо быть эти антирейдером глупым. Да, я понимаю, то что рейдеры уничтожают старания других, но мы ничего плохого по факту не делаем. Просто подумай хорошенько, стоит ли это того, убегать от такого кайфа?
+                        </div>
+
+                        <div class="secret-poll">
+                            <div class="poll-question">💭 Может хорошенько подумаешь?</div>
+                            <div class="poll-buttons">
+                                <button class="poll-btn secret-poll-btn-yes" id="secretPollYes">🤔 Хорошо, я подумаю</button>
+                                <button class="poll-btn secret-poll-btn-no" id="secretPollNo">✋ Я уже все решил</button>
+                            </div>
+                            <div class="secret-poll-result" id="secretPollResult">
+                                <span id="secretPollStatus">Вы ещё не ответили</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- АДМИН-ПАНЕЛЬ -->
+                <div class="tab-content" id="tab-admin">
+                    <div class="admin-panel">
+                        <h2>🛠️ Админ-панель</h2>
+
+                        <div class="admin-form">
+                            <h3>Выдать деньги</h3>
+                            <input type="text" id="adminMoneyUsername" placeholder="Имя" />
+                            <input type="number" id="adminMoneyAmount" placeholder="Сумма" />
+                            <button id="adminMoneyBtn">Выдать</button>
+                        </div>
+
+                        <div class="admin-form">
+                            <h3>Забанить / Разбанить</h3>
+                            <input type="text" id="adminBanUsername" placeholder="Имя" />
+                            <button id="adminBanBtn">Забанить</button>
+                            <button id="adminUnbanBtn">Разбанить</button>
+                        </div>
+
+                        <div class="admin-form">
+                            <h3>Дать / Снять роль</h3>
+                            <input type="text" id="adminRoleUsername" placeholder="Имя" />
+                            <button id="adminRoleBtn">Дать админа</button>
+                            <button id="adminUnroleBtn">Снять админа</button>
+                        </div>
+
+                        <div class="admin-form">
+                            <h3>Запретить / Разрешить комментарии</h3>
+                            <input type="text" id="adminCommentUsername" placeholder="Имя" />
+                            <button id="adminCommentBtn">Запретить</button>
+                            <button id="adminUncommentBtn">Разрешить</button>
+                        </div>
+
+                        <div class="admin-form">
+                            <h3>Писать новости</h3>
+                            <input type="text" id="adminNewsTitle" placeholder="Заголовок" />
+                            <textarea id="adminNewsContent" placeholder="Текст новости"></textarea>
+                            <button id="adminNewsBtn">Отправить</button>
+                        </div>
+
+                        <div class="admin-users-table">
+                            <h3>Таблица пользователей</h3>
+                            <div id="usersList"></div>
+                            <button id="showMoreUsers">Смотреть больше</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-note">
+                    <span>✦ ARBUZERS ✦</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // ВСЕ СКРИПТЫ
+        // ============================================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const menuBtn = document.getElementById('menuBtn');
+            const sideMenu = document.getElementById('sideMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const backBtn = document.getElementById('backBtn');
+            const contentArea = document.getElementById('contentArea');
+            const lockScreen = document.getElementById('lockScreen');
+            const passwordInput = document.getElementById('passwordInput');
+            const unlockBtn = document.getElementById('unlockBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            const secretPasswordInput = document.getElementById('secretPasswordInput');
+            const secretAccessBtn = document.getElementById('secretAccessBtn');
+            const secretAccessError = document.getElementById('secretAccessError');
+
+            const PASSWORD = '3417';
+            const SECRET_PASSWORD = '2305';
+            let isLoggedIn = false;
+
+            // ===== ВХОД =====
+            function handleLogin() {
+                const entered = passwordInput.value.trim();
+                if (entered === PASSWORD) {
+                    isLoggedIn = true;
+                    lockScreen.classList.add('slide-out');
+                    setTimeout(() => {
+                        lockScreen.style.display = 'none';
+                        contentArea.classList.add('active');
+                        menuBtn.classList.add('visible');
+                        backBtn.classList.add('visible');
+                    }, 600);
+                } else {
+                    errorMsg.textContent = '❌ Неверный пароль. Попробуйте снова.';
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            }
+
+            unlockBtn.addEventListener('click', handleLogin);
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleLogin();
+                }
+            });
+
+            // ===== ВХОД В СЕКРЕТНУЮ КОМНАТУ =====
+            function openSecretRoom() {
+                const entered = secretPasswordInput.value.trim();
+                if (entered === SECRET_PASSWORD) {
+                    secretAccessError.textContent = '';
+                    secretPasswordInput.value = '';
+
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    tabContents.forEach(t => t.classList.remove('active'));
+
+                    const secretTab = document.getElementById('tab-secret');
+                    if (secretTab) secretTab.classList.add('active');
+
+                    document.body.classList.add('secret-bg');
+                    backBtn.classList.add('visible');
+
+                    menuBtn.classList.remove('open');
+                    sideMenu.classList.remove('open');
+                    menuOverlay.classList.remove('active');
+                } else {
+                    secretAccessError.textContent = '❌ Неверный код. Попробуйте снова.';
+                    secretPasswordInput.value = '';
+                    secretPasswordInput.focus();
+                }
+            }
+
+            secretAccessBtn.addEventListener('click', openSecretRoom);
+            secretPasswordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    openSecretRoom();
+                }
+            });
+
+            // ===== МЕНЮ =====
+            menuBtn.addEventListener('click', () => {
+                menuBtn.classList.toggle('open');
+                sideMenu.classList.toggle('open');
+                menuOverlay.classList.toggle('active');
+            });
+
+            menuOverlay.addEventListener('click', () => {
+                menuBtn.classList.remove('open');
+                sideMenu.classList.remove('open');
+                menuOverlay.classList.remove('active');
+            });
+
+            // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+            const menuItems = document.querySelectorAll('.menu-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    tabContents.forEach(t => t.classList.remove('active'));
+
+                    this.classList.add('active');
+                    const tabId = this.dataset.tab;
+                    const targetTab = document.getElementById('tab-' + tabId);
+                    if (targetTab) {
+                        targetTab.classList.add('active');
+                    }
+
+                    menuBtn.classList.remove('open');
+                    sideMenu.classList.remove('open');
+                    menuOverlay.classList.remove('active');
+
+                    backBtn.classList.add('visible');
+
+                    if (tabId === 'secret') {
+                        document.body.classList.add('secret-bg');
+                    } else {
+                        document.body.classList.remove('secret-bg');
+                    }
+                });
+            });
+
+            // ===== КНОПКА НАЗАД =====
+            backBtn.addEventListener('click', () => {
+                menuItems.forEach(i => i.classList.remove('active'));
+                tabContents.forEach(t => t.classList.remove('active'));
+
+                const homeTab = document.getElementById('tab-home');
+                const homeItem = document.querySelector('[data-tab="home"]');
+                if (homeTab) homeTab.classList.add('active');
+                if (homeItem) homeItem.classList.add('active');
+
+                backBtn.classList.add('visible');
+                document.body.classList.remove('secret-bg');
+            });
+
+            // ===== ОПРОС НА ГЛАВНОЙ =====
+            const pollYes = document.getElementById('pollYes');
+            const pollNo = document.getElementById('pollNo');
+            const pollCountYes = document.getElementById('pollCountYes');
+            const pollCountNo = document.getElementById('pollCountNo');
+            const pollError = document.getElementById('pollError');
+
+            const STORAGE_KEY = 'arbuzers_poll_votes';
+            const USER_KEY = 'arbuzers_user_vote';
+
+            let votes = { yes: 0, no: 0 };
+            let userVote = null;
+
+            function loadPollData() {
+                const stored = localStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        votes.yes = parsed.yes || 0;
+                        votes.no = parsed.no || 0;
+                    } catch (e) {}
+                }
+                userVote = localStorage.getItem(USER_KEY) || null;
+                updatePollUI();
+            }
+
+            function savePollData() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
+                if (userVote) {
+                    localStorage.setItem(USER_KEY, userVote);
+                } else {
+                    localStorage.removeItem(USER_KEY);
+                }
+                updatePollUI();
+            }
+
+            function updatePollUI() {
+                pollCountYes.textContent = votes.yes;
+                pollCountNo.textContent = votes.no;
+                pollYes.classList.remove('selected-yes', 'selected-no');
+                pollNo.classList.remove('selected-yes', 'selected-no');
+                if (userVote === 'yes') {
+                    pollYes.classList.add('selected-yes');
+                } else if (userVote === 'no') {
+                    pollNo.classList.add('selected-no');
+                }
+            }
+
+            function handlePollVote(choice) {
+                if (!isLoggedIn) return;
+                if (userVote === choice) {
+                    if (choice === 'yes') {
+                        votes.yes = Math.max(0, votes.yes - 1);
+                    } else {
+                        votes.no = Math.max(0, votes.no - 1);
+                    }
+                    userVote = null;
+                    pollError.textContent = '';
+                    savePollData();
+                    return;
+                }
+                if (userVote === 'yes' && choice === 'no') {
+                    votes.yes = Math.max(0, votes.yes - 1);
+                    votes.no += 1;
+                    userVote = 'no';
+                    pollError.textContent = '';
+                    savePollData();
+                    showPollError();
+                    return;
+                }
+                if (userVote === 'no' && choice === 'yes') {
+                    votes.no = Math.max(0, votes.no - 1);
+                    votes.yes += 1;
+                    userVote = 'yes';
+                    pollError.textContent = '';
+                    savePollData();
+                    launchFireworks();
+                    return;
+                }
+                if (userVote === null) {
+                    if (choice === 'yes') {
+                        votes.yes += 1;
+                        userVote = 'yes';
+                        pollError.textContent = '';
+                        savePollData();
+                        launchFireworks();
+                    } else {
+                        votes.no += 1;
+                        userVote = 'no';
+                        pollError.textContent = '';
+                        savePollData();
+                        showPollError();
+                    }
+                }
+            }
+
+            function showPollError() {
+                pollError.textContent = '[ERROR] : ВЫ ВЫБРАЛИ НЕПРАВИЛЬНЫЙ ОТВЕТ 😵';
+                document.getElementById('pollSection').classList.add('flash-error');
+                setTimeout(() => document.getElementById('pollSection').classList.remove('flash-error'), 1000);
+            }
+
+            pollYes.addEventListener('click', () => handlePollVote('yes'));
+            pollNo.addEventListener('click', () => handlePollVote('no'));
+            loadPollData();
+
+            // ===== ФЕЙЕРВЕРК =====
+            let fireworksActive = false;
+            let fwCanvas, fwCtx, particles = [];
+
+            function launchFireworks() {
+                if (fireworksActive) return;
+                fireworksActive = true;
+                fwCanvas = document.getElementById('fireworksCanvas');
+                fwCanvas.width = window.innerWidth;
+                fwCanvas.height = window.innerHeight;
+                fwCtx = fwCanvas.getContext('2d');
+                const colors = ['#ff4444', '#66ff66', '#ffaa00', '#ff66ff', '#44ddff', '#ff3333', '#88ff88'];
+                const count = 80;
+                for (let i = 0; i < count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 6 + 2;
+                    const x = Math.random() * fwCanvas.width;
+                    const y = Math.random() * fwCanvas.height * 0.6 + fwCanvas.height * 0.1;
+                    particles.push({
+                        x: x,
+                        y: y,
+                        vx: Math.cos(angle) * speed * (Math.random() * 0.8 + 0.2),
+                        vy: Math.sin(angle) * speed * (Math.random() * 0.8 + 0.2) - 2,
+                        life: 1,
+                        decay: Math.random() * 0.015 + 0.005,
+                        size: Math.random() * 4 + 2,
+                        color: colors[Math.floor(Math.random() * colors.length)]
+                    });
+                }
+                let frame = 0;
+
+                function drawFireworks() {
+                    if (particles.length === 0 || frame > 120) {
+                        fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                        fireworksActive = false;
+                        particles = [];
+                        return;
+                    }
+                    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                    for (let i = particles.length - 1; i >= 0; i--) {
+                        const p = particles[i];
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.vy += 0.06;
+                        p.life -= p.decay;
+                        if (p.life <= 0) {
+                            particles.splice(i, 1);
+                            continue;
+                        }
+                        fwCtx.globalAlpha = p.life;
+                        fwCtx.beginPath();
+                        fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                        fwCtx.fillStyle = p.color;
+                        fwCtx.fill();
+                        fwCtx.shadowColor = p.color;
+                        fwCtx.shadowBlur = 20;
+                        fwCtx.fill();
+                        fwCtx.shadowBlur = 0;
+                    }
+                    fwCtx.globalAlpha = 1;
+                    frame++;
+                    requestAnimationFrame(drawFireworks);
+                }
+                drawFireworks();
+                setTimeout(() => {
+                    fireworksActive = false;
+                    particles = [];
+                    if (fwCtx) fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                }, 5000);
+            }
+
+            window.addEventListener('resize', () => {
+                if (fwCanvas) {
+                    fwCanvas.width = window.innerWidth;
+                    fwCanvas.height = window.innerHeight;
+                }
+            });
+
+            // ===== КОММЕНТАРИИ =====
+            const COMMENTS_KEY = 'arbuzers_comments';
+            const commentInput = document.getElementById('commentInput');
+            const commentBtn = document.getElementById('commentBtn');
+            const commentsList = document.getElementById('commentsList');
+
+            function loadComments() {
+                const stored = localStorage.getItem(COMMENTS_KEY);
+                let comments = [];
+                if (stored) {
+                    try {
+                        comments = JSON.parse(stored);
+                    } catch (e) {}
+                }
+                renderComments(comments);
+            }
+
+            function renderComments(comments) {
+                if (!comments || comments.length === 0) {
+                    commentsList.innerHTML = '<div class="comment-empty">Пока нет комментариев. Будьте первым!</div>';
+                    return;
+                }
+                let html = '';
+                comments.forEach(c => {
+                    const time = new Date(c.time).toLocaleString('ru-RU', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    html += `
+                        <div class="comment-item">
+                            ${c.text}
+                            <span class="comment-time">${time}</span>
+                        </div>
+                    `;
+                });
+                commentsList.innerHTML = html;
+                commentsList.scrollTop = commentsList.scrollHeight;
+            }
+
+            function addComment() {
+                if (!isLoggedIn) return;
+                const text = commentInput.value.trim();
+                if (!text) return;
+                const stored = localStorage.getItem(COMMENTS_KEY);
+                let comments = [];
+                if (stored) {
+                    try {
+                        comments = JSON.parse(stored);
+                    } catch (e) {}
+                }
+                comments.push({ text: text, time: Date.now() });
+                localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+                commentInput.value = '';
+                renderComments(comments);
+            }
+
+            commentBtn.addEventListener('click', addComment);
+            commentInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addComment();
+                }
+            });
+            loadComments();
+
+            // ===== ОПРОС В СЕКРЕТНОЙ КОМНАТЕ =====
+            const secretPollYes = document.getElementById('secretPollYes');
+            const secretPollNo = document.getElementById('secretPollNo');
+            const secretPollStatus = document.getElementById('secretPollStatus');
+            const SECRET_POLL_KEY = 'arbuzers_secret_poll';
+
+            function loadSecretPoll() {
+                const stored = localStorage.getItem(SECRET_POLL_KEY);
+                if (stored) {
+                    const choice = stored;
+                    if (choice === 'yes') {
+                        secretPollYes.classList.add('selected-yes');
+                        secretPollYes.disabled = true;
+                        secretPollNo.disabled = true;
+                        secretPollStatus.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
+                        secretPollStatus.style.color = '#88dd88';
+                    } else if (choice === 'no') {
+                        secretPollNo.classList.add('selected-no');
+                        secretPollYes.disabled = true;
+                        secretPollNo.disabled = true;
+                        secretPollStatus.textContent = '❌ Вы выбрали: "Я уже все решил"';
+                        secretPollStatus.style.color = '#dd8888';
+                    }
+                } else {
+                    secretPollYes.classList.remove('selected-yes', 'selected-no');
+                    secretPollNo.classList.remove('selected-yes', 'selected-no');
+                    secretPollYes.disabled = false;
+                    secretPollNo.disabled = false;
+                    secretPollStatus.textContent = 'Вы ещё не ответили';
+                    secretPollStatus.style.color = '#8877aa';
+                }
+            }
+
+            function handleSecretVote(choice) {
+                if (!isLoggedIn) return;
+                const stored = localStorage.getItem(SECRET_POLL_KEY);
+                if (stored) return;
+                localStorage.setItem(SECRET_POLL_KEY, choice);
+                if (choice === 'yes') {
+                    secretPollYes.classList.add('selected-yes');
+                    secretPollYes.disabled = true;
+                    secretPollNo.disabled = true;
+                    secretPollStatus.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
+                    secretPollStatus.style.color = '#88dd88';
+                } else {
+                    secretPollNo.classList.add('selected-no');
+                    secretPollYes.disabled = true;
+                    secretPollNo.disabled = true;
+                    secretPollStatus.textContent = '❌ Вы выбрали: "Я уже все решил"';
+                    secretPollStatus.style.color = '#dd8888';
+                }
+            }
+
+            secretPollYes.addEventListener('click', () => handleSecretVote('yes'));
+            secretPollNo.addEventListener('click', () => handleSecretVote('no'));
+            loadSecretPoll();
+
+            // ===== ПАСХАЛКА 1987 (FNAF) =====
+            let fnafTriggered = false;
+            let keyBuffer = '';
+
+            function playFnafMusic() {
+                if (fnafTriggered || !isLoggedIn) return;
+                fnafTriggered = true;
+                try {
+                    const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    const notes = [
+                        { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
+                        { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
+                        { freq: 466.16, dur: 0.4 }, { freq: 415.30, dur: 0.2 },
+                        { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.2 },
+                        { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.4 },
+                        { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
+                        { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
+                        { freq: 369.99, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                        { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                        { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                        { freq: 311.13, dur: 0.4 }, { freq: 466.16, dur: 0.15 },
+                        { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.15 },
+                        { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.3 },
+                        { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
+                        { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
+                        { freq: 415.30, dur: 0.3 }, { freq: 369.99, dur: 0.15 },
+                        { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.15 },
+                        { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.3 },
+                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                    ];
+                    let time = 0;
+                    notes.forEach(note => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.value = note.freq;
+                        gain.gain.setValueAtTime(0.12, audioCtx.currentTime + time);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + time + note.dur);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(audioCtx.currentTime + time);
+                        osc.stop(audioCtx.currentTime + time + note.dur);
+                        time += note.dur + 0.01;
+                    });
+                    showFnafScreen();
+                } catch (e) {
+                    console.log('Audio not supported');
+                }
+            }
+
+            function showFnafScreen() {
+                const div = document.createElement('div');
+                div.className = 'fnaf-error-screen';
+                div.innerHTML = `
+                    <h2>⚠️ ERROR</h2>
+                    <p>POWER OUTAGE • 1987</p>
+                    <p style="font-size:0.8rem; margin-top:30px; opacity:0.4;">🔴 • 🔴 • 🔴</p>
+                `;
+                document.body.appendChild(div);
+                setTimeout(() => {
+                    div.style.animation = 'fnafFlicker 0.2s ease 8';
+                }, 100);
+                setTimeout(() => {
+                    div.remove();
+                }, 5000);
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (!isLoggedIn || fnafTriggered) return;
+                if (e.key >= '0' && e.key <= '9') {
+                    keyBuffer += e.key;
+                    if (keyBuffer.length > 4) keyBuffer = keyBuffer.slice(-4);
+                    if (keyBuffer === '1987') {
+                        playFnafMusic();
+                        keyBuffer = '';
+                    }
+                } else {
+                    keyBuffer = '';
+                }
+            });
+
+            document.addEventListener('input', (e) => {
+                if (!isLoggedIn || fnafTriggered) return;
+                const val = e.target.value;
+                if (typeof val === 'string' && val.includes('1987')) {
+                    playFnafMusic();
+                    e.target.value = val.replace('1987', '');
+                }
+            });
+
+            // ===== КЛИКЕР =====
+            let clickerMoney = parseInt(localStorage.getItem('clickerMoney') || '0');
+            let clickPerClick = parseInt(localStorage.getItem('clickPerClick') || '1');
+            let autoClicker = parseInt(localStorage.getItem('autoClicker') || '0');
+
+            const clickerMoneyEl = document.getElementById('clickerMoney');
+            const clickerPerClickEl = document.getElementById('clickerPerClick');
+            const clickerBtn = document.getElementById('clickerBtn');
+            const upgradeClickBtn = document.getElementById('upgradeClick');
+            const upgradeAutoBtn = document.getElementById('upgradeAuto');
+
+            function updateClickerUI() {
+                clickerMoneyEl.textContent = clickerMoney;
+                clickerPerClickEl.textContent = '+' + clickPerClick + ' за клик';
+                localStorage.setItem('clickerMoney', clickerMoney.toString());
+                localStorage.setItem('clickPerClick', clickPerClick.toString());
+                localStorage.setItem('autoClicker', autoClicker.toString());
+            }
+
+            clickerBtn.addEventListener('click', () => {
+                if (!isLoggedIn) return;
+                clickerMoney += clickPerClick;
+                updateClickerUI();
+                clickerBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => { clickerBtn.style.transform = 'scale(1)'; }, 100);
+            });
+
+            upgradeClickBtn.addEventListener('click', () => {
+                if (!isLoggedIn) return;
+                if (clickerMoney >= 50) {
+                    clickerMoney -= 50;
+                    clickPerClick += 1;
+                    updateClickerUI();
+                } else {
+                    alert('Недостаточно 🍉!');
+                }
+            });
+
+            upgradeAutoBtn.addEventListener('click', () => {
+                if (!isLoggedIn) return;
+                if (clickerMoney >= 100) {
+                    clickerMoney -= 100;
+                    autoClicker += 1;
+                    updateClickerUI();
+                } else {
+                    alert('Недостаточно 🍉!');
+                }
+            });
+
+            setInterval(() => {
+                if (isLoggedIn && autoClicker > 0) {
+                    clickerMoney += autoClicker;
+                    updateClickerUI();
+                }
+            }, 1000);
+
+            updateClickerUI();
+
+            // ===== ИГРА =====
+            const gameCells = document.querySelectorAll('.game-cell');
+            const gameScoreEl = document.getElementById('gameScore');
+            const gameResetBtn = document.getElementById('gameReset');
+            let gameScore = 0;
+            let gameActive = true;
+
+            function startGame() {
+                gameActive = true;
+                gameCells.forEach(cell => {
+                    cell.textContent = '';
+                    cell.classList.remove('win');
+                    cell.style.background = '#1a1a1a';
+                });
+                const randomIndex = Math.floor(Math.random() * 9);
+                setTimeout(() => {
+                    if (gameActive) {
+                        gameCells[randomIndex].textContent = '🍉';
+                        gameCells[randomIndex].style.background = '#2a2a00';
+                    }
+                }, 500);
+            }
+
+            gameCells.forEach((cell, index) => {
+                cell.addEventListener('click', () => {
+                    if (!isLoggedIn || !gameActive) return;
+                    if (cell.textContent === '🍉') {
+                        gameScore += 10;
+                        gameScoreEl.textContent = gameScore;
+                        cell.classList.add('win');
+                        cell.textContent = '🎉';
+                        gameActive = false;
+                        setTimeout(startGame, 1500);
+                    } else {
+                        cell.style.background = '#2a0000';
+                        setTimeout(() => { cell.style.background = '#1a1a1a'; }, 300);
+                    }
+                });
+            });
+
+            gameResetBtn.addEventListener('click', () => {
+                gameScore = 0;
+                gameScoreEl.textContent = '0';
+                startGame();
+            });
+
+            startGame();
+
+            // ===== ПРОФИЛЬ =====
+            const profileName = document.getElementById('profileName');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const profileDisplay = document.getElementById('profileDisplay');
+
+            function loadProfile() {
+                const saved = localStorage.getItem('arbuzers_profile');
+                if (saved) {
+                    profileDisplay.textContent = '👤 ' + saved;
+                }
+            }
+
+            saveProfileBtn.addEventListener('click', () => {
+                const name = profileName.value.trim();
+                if (name) {
+                    localStorage.setItem('arbuzers_profile', name);
+                    profileDisplay.textContent = '👤 ' + name;
+                    profileName.value = '';
+                }
+            });
+
+            loadProfile();
+
+            // ===== ПЕРЕВОД =====
+            const transferName = document.getElementById('transferName');
+            const transferAmount = document.getElementById('transferAmount');
+            const transferBtn = document.getElementById('transferBtn');
+            const transferStatus = document.getElementById('transferStatus');
+
+            transferBtn.addEventListener('click', () => {
+                if (!isLoggedIn) return;
+                const name = transferName.value.trim();
+                const amount = parseInt(transferAmount.value);
+                if (!name || !amount || amount <= 0) {
+                    transferStatus.textContent = '❌ Введите имя и сумму!';
+                    return;
+                }
+                if (amount > clickerMoney) {
+                    transferStatus.textContent = '❌ Недостаточно 🍉!';
+                    return;
+                }
+                clickerMoney -= amount;
+                updateClickerUI();
+                transferStatus.textContent = '✅ Переведено ' + amount + ' 🍉 пользователю ' + name;
+                transferName.value = '';
+                transferAmount.value = '';
+            });
+
+            // ===== АДМИН-ПАНЕЛЬ =====
+            document.getElementById('adminMoneyBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminMoneyUsername').value.trim();
+                const amount = parseInt(document.getElementById('adminMoneyAmount').value);
+                if (name && amount > 0) {
+                    alert('✅ Выдано ' + amount + ' 🍉 пользователю ' + name);
+                }
+            });
+
+            document.getElementById('adminBanBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminBanUsername').value.trim();
+                if (name) alert('🔨 Пользователь ' + name + ' забанен!');
+            });
+
+            document.getElementById('adminUnbanBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminBanUsername').value.trim();
+                if (name) alert('🔓 Пользователь ' + name + ' разбанен!');
+            });
+
+            document.getElementById('adminRoleBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminRoleUsername').value.trim();
+                if (name) alert('👑 Пользователь ' + name + ' стал админом!');
+            });
+
+            document.getElementById('adminUnroleBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminRoleUsername').value.trim();
+                if (name) alert('⬇️ Пользователь ' + name + ' лишён админки!');
+            });
+
+            document.getElementById('adminCommentBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminCommentUsername').value.trim();
+                if (name) alert('🔇 Пользователю ' + name + ' запрещены комментарии!');
+            });
+
+            document.getElementById('adminUncommentBtn').addEventListener('click', () => {
+                const name = document.getElementById('adminCommentUsername').value.trim();
+                if (name) alert('🔊 Пользователю ' + name + ' разрешены комментарии!');
+            });
+
+            document.getElementById('adminNewsBtn').addEventListener('click', () => {
+                const title = document.getElementById('adminNewsTitle').value.trim();
+                const content = document.getElementById('adminNewsContent').value.trim();
+                if (title && content) {
+                    alert('📰 Новость опубликована!\n\n' + title + '\n' + content);
+                }
+            });
+
+            document.getElementById('showMoreUsers').addEventListener('click', () => {
+                const list = document.getElementById('usersList');
+                const users = ['Кузя', 'Арбузер', 'Моника', 'Гость', 'Admin'];
+                list.innerHTML = users.map(u => '👤 ' + u).join('<br>');
+            });
+
+            // ===== ПОСТЫ =====
+            const posts = [
+                'Первый пост! Добро пожаловать в мир Арбузеров! 🍉',
+                'Второй пост: Скоро будет большое обновление сайта!',
+                'Третий пост: Арбузеры готовятся к новым рейдам...',
+                'Четвёртый пост: Код на сайт получили только избранные.'
+            ];
+            let currentPost = 0;
+            const postText = document.getElementById('postText');
+            const postCounter = document.getElementById('postCounter');
+            const prevPost = document.getElementById('prevPost');
+            const nextPost = document.getElementById('nextPost');
+
+            function updatePost() {
+                postText.textContent = posts[currentPost] || 'Пост не найден';
+                postCounter.textContent = (currentPost + 1) + ' / ' + posts.length;
+            }
+
+            prevPost.addEventListener('click', () => {
+                if (currentPost > 0) { currentPost--;
+                    updatePost(); }
+            });
+
+            nextPost.addEventListener('click', () => {
+                if (currentPost < posts.length - 1) { currentPost++;
+                    updatePost(); }
+            });
+
+            updatePost();
+
+            // ===== ЛИДЕРЫ =====
+            function updateLeaderboard() {
+                const list = document.getElementById('leaderboardList');
+                const users = [
+                    { name: 'Кузя', score: 9999 },
+                    { name: 'Арбузер', score: 5000 },
+                    { name: 'Моника', score: 2500 },
+                    { name: 'Гость', score: 1000 },
+                    { name: 'Вы', score: clickerMoney }
+                ];
+                users.sort((a, b) => b.score - a.score);
+                list.innerHTML = users.map((u, i) => `
+                    <div class="leaderboard-item">
+                        <span class="rank">${i + 1}</span>
+                        <span class="name">${u.name}</span>
+                        <span class="score">${u.score}🍉</span>
+                    </div>
+                `).join('');
+            }
+
+            setInterval(updateLeaderboard, 5000);
+            updateLeaderboard();
+
+            // ===== МОБИЛЬНАЯ ВЕРСИЯ =====
+            if (window.innerWidth <= 550) {
+                document.body.classList.add('is-mobile');
+            }
+
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 550) {
+                    document.body.classList.add('is-mobile');
+                } else {
+                    document.body.classList.remove('is-mobile');
+                }
+            });
+
+            passwordInput.focus();
+
+        });
+    </script>
+
+</body>
+</html>
