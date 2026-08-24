@@ -394,6 +394,111 @@ app.post('/api/admin/remove-admin', (req, res) => {
     });
 });
 
+// Таблица записей
+db.run(`CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    author TEXT,
+    title TEXT,
+    content TEXT,
+    time INTEGER
+)`);
+
+// === API для записей ===
+app.get('/api/posts', (req, res) => {
+    db.all('SELECT * FROM posts ORDER BY time DESC', (err, rows) => {
+        if (err) return res.json({ error: err.message });
+        res.json(rows || []);
+    });
+});
+
+app.post('/api/posts', (req, res) => {
+    const { author, title, content } = req.body;
+    if (!author || !title || !content) return res.json({ error: 'Недостаточно данных' });
+    db.run('INSERT INTO posts (author, title, content, time) VALUES (?, ?, ?, ?)',
+        [author, title, content, Date.now()], (err) => {
+            if (err) return res.json({ error: err.message });
+            res.json({ success: true });
+        });
+});
+
+app.put('/api/posts/:id', (req, res) => {
+    const { id } = req.params;
+    const { user, title, content } = req.body;
+    if (!user || !title || !content) return res.json({ error: 'Недостаточно данных' });
+    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
+        if (err) return res.json({ error: err.message });
+        if (!post) return res.json({ error: 'Запись не найдена' });
+        if (post.author !== user) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                updatePost();
+            });
+        } else {
+            updatePost();
+        }
+        function updatePost() {
+            db.run('UPDATE posts SET title = ?, content = ? WHERE id = ?', [title, content, id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
+    });
+});
+
+app.delete('/api/posts/:id', (req, res) => {
+    const { id } = req.params;
+    const { user } = req.body;
+    if (!user) return res.json({ error: 'Недостаточно данных' });
+    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
+        if (err) return res.json({ error: err.message });
+        if (!post) return res.json({ error: 'Запись не найдена' });
+        if (post.author !== user) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                deletePost();
+            });
+        } else {
+            deletePost();
+        }
+        function deletePost() {
+            db.run('DELETE FROM posts WHERE id = ?', [id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
+    });
+});
+
+// === Удаление сообщений в чате ===
+app.delete('/api/messages/:id', (req, res) => {
+    const { id } = req.params;
+    const { user } = req.body;
+    if (!user) return res.json({ error: 'Недостаточно данных' });
+    db.get('SELECT user FROM messages WHERE id = ?', [id], (err, msg) => {
+        if (err) return res.json({ error: err.message });
+        if (!msg) return res.json({ error: 'Сообщение не найдено' });
+        if (msg.user !== user) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                deleteMsg();
+            });
+        } else {
+            deleteMsg();
+        }
+        function deleteMsg() {
+            db.run('DELETE FROM messages WHERE id = ?', [id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
+    });
+});
 // ===== ГЛАВНАЯ СТРАНИЦА =====
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
