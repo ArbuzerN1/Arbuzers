@@ -26,11 +26,6 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            transition: background 0.8s ease;
-        }
-
-        body.secret-bg {
-            background: #0a0a2a;
         }
 
         .bg-layer {
@@ -41,12 +36,7 @@
             height: 100%;
             z-index: 0;
             background: radial-gradient(ellipse at center, #1a0000 0%, #0a0a0a 70%);
-            transition: background 0.8s ease;
             overflow: hidden;
-        }
-
-        body.secret-bg .bg-layer {
-            background: radial-gradient(ellipse at center, #0a0a2a 0%, #0a0a4a 70%);
         }
 
         .vhs-overlay {
@@ -168,12 +158,6 @@
             overflow-y: visible;
             transition: all 0.8s ease;
             position: relative;
-        }
-
-        body.secret-bg .container {
-            background: rgba(10, 10, 40, 0.95);
-            border-color: #1a1a4a;
-            box-shadow: 0 0 60px rgba(0, 0, 255, 0.15), inset 0 0 80px rgba(0, 0, 255, 0.03);
         }
 
         .title-wrapper {
@@ -384,7 +368,6 @@
             to { opacity: 1; transform: translateX(0) scale(1); }
         }
 
-        /* ===== Остальные стили (записи, опросы, комментарии, кликер, игра и т.д.) ===== */
         .intro-text {
             background: #141010;
             border-left: 6px solid #ff1a1a;
@@ -424,6 +407,12 @@
 
         .user-info .admin-badge {
             color: #ff4444;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        .user-info .owner-badge {
+            color: #ffd700;
             font-weight: 700;
             margin-left: 10px;
         }
@@ -488,106 +477,100 @@
             font-weight: 600;
         }
 
-        .poll-section {
-            margin-top: 20px;
-            padding: 24px 20px 20px;
-            border-top: 2px solid #1f1a1a;
-            border-radius: 16px;
-            background: rgba(20, 16, 16, 0.6);
-            text-align: center;
-        }
-
-        .poll-question {
-            color: #ffb3b3;
-            font-size: 1.05rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        .poll-buttons {
+        .record .record-actions {
+            margin-top: 12px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
+            gap: 10px;
             flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
-        .poll-btn {
-            padding: 12px 36px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
+        .record .record-actions button {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: 0.3s;
-            letter-spacing: 1px;
-            min-width: 100px;
         }
 
-        .poll-btn-yes {
-            background: #1a3a8a;
-            color: #aaccff;
-            box-shadow: 0 0 25px rgba(50, 100, 255, 0.2);
+        .record .record-actions button:hover {
+            background: #ff4444;
+            color: #0a0a0a;
         }
 
-        .poll-btn-yes:hover {
-            background: #2a5acc;
-            transform: scale(1.08);
-            box-shadow: 0 0 50px rgba(50, 100, 255, 0.4);
+        .record .record-actions .edit-btn {
+            border-color: #66ff66;
+            color: #66ff66;
         }
 
-        .poll-btn-no {
-            background: #5a1a1a;
-            color: #ff7777;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.2);
+        .record .record-actions .edit-btn:hover {
+            background: #66ff66;
+            color: #0a0a0a;
         }
 
-        .poll-btn-no:hover {
-            background: #8a2a2a;
-            transform: scale(1.08);
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
-        }
-
-        .poll-btn.selected-yes {
-            background: #3a7aff;
-            color: #ffffff;
-            box-shadow: 0 0 60px rgba(50, 100, 255, 0.6);
-            border: 2px solid #66ff66;
-        }
-
-        .poll-btn.selected-no {
-            background: #cc3333;
-            color: #ffffff;
-            box-shadow: 0 0 60px rgba(255, 0, 0, 0.6);
-            border: 2px solid #ff3333;
-        }
-
-        .poll-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: scale(0.95);
-        }
-
-        .poll-result {
-            margin-top: 16px;
-            color: #888;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
-        }
-
-        .poll-result span {
-            color: #ffb3b3;
-            font-weight: 600;
-        }
-
-        .poll-error-msg {
-            margin-top: 14px;
+        .record .record-actions .delete-btn {
+            border-color: #ff3333;
             color: #ff3333;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-            letter-spacing: 2px;
+        }
+
+        .record .record-actions .delete-btn:hover {
+            background: #ff3333;
+            color: #0a0a0a;
+        }
+
+        /* ===== СОЗДАНИЕ ЗАПИСИ ===== */
+        .create-post {
+            background: rgba(20, 16, 16, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #2a1a1a;
+        }
+
+        .create-post input,
+        .create-post textarea {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #3a1a1a;
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #ffb3b3;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            margin-bottom: 10px;
+        }
+
+        .create-post input:focus,
+        .create-post textarea:focus {
+            border-color: #66ff66;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.1);
+        }
+
+        .create-post textarea {
+            min-height: 80px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .create-post button {
+            background: transparent;
+            border: 2px solid #ff4444;
+            color: #ff4444;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .create-post button:hover {
+            background: #ff4444;
+            color: #0a0a0a;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
         }
 
         /* ===== ЧАТ ===== */
@@ -624,6 +607,7 @@
             color: #cc9999;
             font-size: 0.95rem;
             line-height: 1.5;
+            position: relative;
         }
 
         .chat-message .msg-user {
@@ -636,6 +620,39 @@
             font-size: 0.75rem;
             display: block;
             margin-top: 4px;
+        }
+
+        .chat-message .msg-actions {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .chat-message .msg-actions button {
+            background: transparent;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .chat-message .msg-actions button:hover {
+            color: #ff4444;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .chat-message .msg-actions .delete-msg {
+            color: #ff3333;
+        }
+
+        .chat-message .msg-actions .delete-msg:hover {
+            color: #ff0000;
+            background: rgba(255, 0, 0, 0.2);
         }
 
         .chat-input-area {
@@ -767,17 +784,6 @@
             box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
         }
 
-        .menu-item.private {
-            border-color: #7a4dff;
-            color: #b366ff;
-        }
-
-        .menu-item.private:hover {
-            background: #7a4dff;
-            color: #fff;
-            box-shadow: 0 0 30px rgba(122, 77, 255, 0.4);
-        }
-
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -863,180 +869,6 @@
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== СЕКРЕТНАЯ КОМНАТА ===== */
-        .secret-room-tab {
-            display: none;
-            flex-direction: column;
-            gap: 25px;
-            padding: 20px 0;
-            animation: secretFadeIn 0.8s ease;
-        }
-
-        .secret-room-tab.active {
-            display: flex;
-        }
-
-        @keyframes secretFadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .secret-room-tab .secret-title {
-            font-size: 2rem;
-            font-weight: 900;
-            text-align: center;
-            background: linear-gradient(135deg, #b366ff, #7a4dff, #4d4dff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 60px rgba(102, 51, 255, 0.3);
-            letter-spacing: 2px;
-        }
-
-        .secret-room-tab .secret-text {
-            background: rgba(30, 20, 50, 0.6);
-            border-left: 6px solid #7a4dff;
-            border-radius: 16px;
-            padding: 24px 28px;
-            color: #c9b3ff;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            box-shadow: 0 0 40px rgba(102, 51, 255, 0.05);
-            text-align: justify;
-        }
-
-        .secret-room-tab .secret-poll {
-            background: rgba(30, 20, 50, 0.4);
-            border-radius: 16px;
-            padding: 24px 20px;
-            text-align: center;
-            border: 1px solid #3a2a6a;
-        }
-
-        .secret-room-tab .secret-poll .poll-question {
-            color: #c9b3ff;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .secret-room-tab .secret-poll .poll-buttons {
-            gap: 30px;
-        }
-
-        .secret-room-tab .secret-poll .poll-btn {
-            min-width: 140px;
-            padding: 14px 40px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            border: 2px solid transparent;
-            transition: 0.3s;
-        }
-
-        .secret-poll-btn-yes {
-            background: #1a2a6a;
-            color: #aaccff;
-            box-shadow: 0 0 30px rgba(50, 50, 255, 0.2);
-        }
-
-        .secret-poll-btn-yes:hover:not(:disabled) {
-            background: #2a4a9a;
-            transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(50, 50, 255, 0.4);
-        }
-
-        .secret-poll-btn-no {
-            background: #4a1a4a;
-            color: #ff99cc;
-            box-shadow: 0 0 30px rgba(200, 50, 255, 0.2);
-        }
-
-        .secret-poll-btn-no:hover:not(:disabled) {
-            background: #6a2a6a;
-            transform: scale(1.05);
-            box-shadow: 0 0 50px rgba(200, 50, 255, 0.4);
-        }
-
-        .secret-poll-btn.selected-yes {
-            background: #3a5aff;
-            color: #fff;
-            border-color: #66ff66;
-            box-shadow: 0 0 60px rgba(50, 100, 255, 0.6);
-        }
-
-        .secret-poll-btn.selected-no {
-            background: #aa33aa;
-            color: #fff;
-            border-color: #ff66ff;
-            box-shadow: 0 0 60px rgba(200, 50, 255, 0.6);
-        }
-
-        .secret-poll-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: scale(0.95);
-        }
-
-        .secret-poll-result {
-            margin-top: 16px;
-            color: #8877aa;
-            font-size: 1rem;
-        }
-
-        .secret-poll-result span {
-            color: #c9b3ff;
-            font-weight: 600;
-        }
-
-        .secret-access {
-            text-align: center;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px solid #1a1a1a;
-        }
-
-        .secret-access input {
-            background: #1a1a1a;
-            border: 1px solid #2a1a1a;
-            border-radius: 50px;
-            padding: 8px 16px;
-            width: 150px;
-            font-size: 1rem;
-            text-align: center;
-            color: #ff9999;
-            outline: none;
-            transition: 0.3s;
-            letter-spacing: 2px;
-        }
-
-        .secret-access input:focus {
-            border-color: #7a4dff;
-            box-shadow: 0 0 20px rgba(122, 77, 255, 0.1);
-        }
-
-        .secret-access button {
-            background: transparent;
-            border: 1px solid #3a1a3a;
-            color: #666;
-            padding: 8px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            margin-left: 8px;
-        }
-
-        .secret-access button:hover {
-            border-color: #7a4dff;
-            color: #b366ff;
-        }
-
-        .secret-access .secret-error {
-            color: #ff3333;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            min-height: 1.2rem;
         }
 
         /* ===== КЛИКЕР ===== */
@@ -1250,6 +1082,11 @@
 
         .admin-users-table .user-row .admin-tag {
             color: #ff4444;
+            font-weight: 700;
+        }
+
+        .admin-users-table .user-row .owner-tag {
+            color: #ffd700;
             font-weight: 700;
         }
 
@@ -1516,15 +1353,6 @@
             font-size: 0.85rem;
         }
 
-        .is-mobile .secret-room-tab .secret-title {
-            font-size: 1.2rem;
-        }
-
-        .is-mobile .secret-room-tab .secret-text {
-            font-size: 0.9rem;
-            padding: 14px;
-        }
-
         .is-mobile .auth-screen input {
             max-width: 200px;
             font-size: 1rem;
@@ -1582,6 +1410,17 @@
         }
 
         .is-mobile .leaderboard-item {
+            font-size: 0.9rem;
+            padding: 10px 12px;
+        }
+
+        .is-mobile .record .record-actions button {
+            font-size: 0.7rem;
+            padding: 2px 10px;
+        }
+
+        .is-mobile .create-post input,
+        .is-mobile .create-post textarea {
             font-size: 0.9rem;
             padding: 10px 12px;
         }
@@ -1675,6 +1514,7 @@
         <h3>📂 РАЗДЕЛЫ</h3>
         <button class="menu-item active" data-tab="home">🏠 Главная</button>
         <button class="menu-item" data-tab="chat">💬 Чат</button>
+        <button class="menu-item" data-tab="posts">📝 Записи</button>
         <button class="menu-item" data-tab="facts">📜 Факты</button>
         <button class="menu-item" data-tab="opinions">💭 Мнения</button>
         <button class="menu-item" data-tab="history">📖 История</button>
@@ -1682,7 +1522,6 @@
         <button class="menu-item" data-tab="leaders">🏆 Лидеры</button>
         <button class="menu-item" data-tab="shop">🛒 Магазин</button>
         <button class="menu-item" data-tab="game">🎮 Мини-игра</button>
-        <button class="menu-item private" data-tab="secret">🔮 Секретная комната</button>
         <button class="menu-item" data-tab="admin" id="adminMenuBtn" style="display:none;">🛠️ Админ-панель</button>
     </div>
 
@@ -1715,6 +1554,7 @@
                     <div class="user-info" id="userInfo">
                         👤 <strong id="userNameDisplay">Гость</strong> | 🍉 <strong id="userMoneyDisplay">0</strong>
                         <span class="admin-badge" id="adminBadge" style="display:none;">⭐ АДМИН</span>
+                        <span class="owner-badge" id="ownerBadge" style="display:none;">👑 ВЛАДЕЛЕЦ</span>
                     </div>
 
                     <div class="intro-text">
@@ -1740,13 +1580,6 @@
                         </div>
                         <div class="poll-error-msg" id="pollError"></div>
                     </div>
-
-                    <!-- ВХОД В СЕКРЕТНУЮ КОМНАТУ -->
-                    <div class="secret-access">
-                        <input type="password" id="secretPasswordInput" placeholder="🔮 Код" maxlength="4" />
-                        <button id="secretAccessBtn">🔓 Войти</button>
-                        <div class="secret-error" id="secretAccessError"></div>
-                    </div>
                 </div>
 
                 <!-- ЧАТ -->
@@ -1760,6 +1593,18 @@
                             <input type="text" id="chatInput" placeholder="Напишите сообщение..." maxlength="200" />
                             <button id="chatBtn">Отправить</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ЗАПИСИ -->
+                <div class="tab-content" id="tab-posts">
+                    <div class="create-post">
+                        <input type="text" id="postTitle" placeholder="Заголовок записи..." maxlength="100" />
+                        <textarea id="postContent" placeholder="Текст записи..." maxlength="1000"></textarea>
+                        <button id="createPostBtn">📝 Опубликовать запись</button>
+                    </div>
+                    <div id="postsList">
+                        <div class="chat-empty">Загрузка записей...</div>
                     </div>
                 </div>
 
@@ -1885,27 +1730,6 @@
                     </div>
                 </div>
 
-                <!-- СЕКРЕТНАЯ КОМНАТА -->
-                <div class="tab-content" id="tab-secret">
-                    <div class="secret-room-tab">
-                        <div class="secret-title">💜 СООБЩЕНИЕ ДЛЯ ПОЛЬЗОВАТЕЛЯ</div>
-                        <div class="secret-text">
-                            Пользователь, ты наверное знаешь, что Кузя никогда особо не пытался делать какое-то добро. Я не знаю, откуда взялись термин белые и чёрные рейдеры, но твоё решение ударило мне прям в сердце. Не надо быть эти антирейдером глупым. Да, я понимаю, то что рейдеры уничтожают старания других, но мы ничего плохого по факту не делаем. Просто подумай хорошенько, стоит ли это того, убегать от такого кайфа?
-                        </div>
-
-                        <div class="secret-poll">
-                            <div class="poll-question">💭 Может хорошенько подумаешь?</div>
-                            <div class="poll-buttons">
-                                <button class="poll-btn secret-poll-btn-yes" id="secretPollYes">🤔 Хорошо, я подумаю</button>
-                                <button class="poll-btn secret-poll-btn-no" id="secretPollNo">✋ Я уже все решил</button>
-                            </div>
-                            <div class="secret-poll-result" id="secretPollResult">
-                                <span id="secretPollStatus">Вы ещё не ответили</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- АДМИН-ПАНЕЛЬ -->
                 <div class="tab-content" id="tab-admin">
                     <div class="admin-panel">
@@ -1926,7 +1750,7 @@
                         </div>
 
                         <div class="admin-form">
-                            <h3>⭐ Дать / Снять админа</h3>
+                            <h3>⭐ Дать / Снять админа (только владелец)</h3>
                             <input type="text" id="adminRoleUsername" placeholder="Имя" />
                             <button id="adminRoleBtn">Дать админа</button>
                             <button id="adminUnroleBtn">Снять админа</button>
@@ -1970,6 +1794,9 @@
         const sideMenu = document.getElementById('sideMenu');
         const menuOverlay = document.getElementById('menuOverlay');
 
+        const OWNER_NAME = 'Великий Арбуз';
+        const OWNER_PASSWORD = '3417';
+
         authSwitch.addEventListener('click', () => {
             isLogin = !isLogin;
             authBtn.textContent = isLogin ? 'ВОЙТИ' : 'ЗАРЕГИСТРИРОВАТЬСЯ';
@@ -1987,6 +1814,33 @@
             }
 
             try {
+                if (name === OWNER_NAME && password === OWNER_PASSWORD) {
+                    const res = await fetch('/api/auth', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, password })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        currentUser = data.user;
+                        if (currentUser.admin !== 1) {
+                            await fetch('/api/admin/give-admin', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    admin: 'Великий Арбуз',
+                                    target: 'Великий Арбуз'
+                                })
+                            });
+                            currentUser.admin = 1;
+                        }
+                        loginSuccess();
+                    } else {
+                        authError.textContent = '❌ Ошибка создания владельца';
+                    }
+                    return;
+                }
+
                 const res = await fetch('/api/auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -1996,33 +1850,7 @@
 
                 if (data.success) {
                     currentUser = data.user;
-                    authScreen.style.display = 'none';
-                    contentArea.classList.add('active');
-                    menuBtn.classList.add('visible');
-                    backBtn.classList.add('visible');
-
-                    // Показываем админ-меню если есть права
-                    if (currentUser.admin === 1) {
-                        document.getElementById('adminMenuBtn').style.display = 'block';
-                        document.getElementById('adminBadge').style.display = 'inline';
-                    }
-
-                    updateUserInfo();
-                    loadPoll();
-                    loadLeaderboard();
-                    loadChat();
-                    connectWebSocket();
-                    loadSecretPoll();
-                    loadUsersList();
-                    loadSkins();
-
-                    // Автокликер
-                    setInterval(() => {
-                        if (currentUser && currentUser.auto_clicker > 0) {
-                            clickAuto();
-                        }
-                    }, 1000);
-
+                    loginSuccess();
                 } else {
                     authError.textContent = '❌ ' + (data.error || 'Ошибка');
                 }
@@ -2030,6 +1858,41 @@
                 authError.textContent = '❌ Ошибка соединения с сервером';
             }
         });
+
+        function loginSuccess() {
+            authScreen.style.display = 'none';
+            contentArea.classList.add('active');
+            menuBtn.classList.add('visible');
+            backBtn.classList.add('visible');
+
+            if (currentUser.admin === 1) {
+                document.getElementById('adminMenuBtn').style.display = 'block';
+                document.getElementById('adminBadge').style.display = 'inline';
+
+                if (currentUser.name === 'Великий Арбуз') {
+                    document.getElementById('adminBadge').style.display = 'none';
+                    document.getElementById('ownerBadge').style.display = 'inline';
+                } else {
+                    document.getElementById('adminBadge').style.display = 'inline';
+                    document.getElementById('ownerBadge').style.display = 'none';
+                }
+            }
+
+            updateUserInfo();
+            loadPoll();
+            loadLeaderboard();
+            loadChat();
+            loadPosts();
+            connectWebSocket();
+            loadUsersList();
+            loadSkins();
+
+            setInterval(() => {
+                if (currentUser && currentUser.auto_clicker > 0) {
+                    clickAuto();
+                }
+            }, 1000);
+        }
 
         authPassword.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') authBtn.click();
@@ -2054,7 +1917,6 @@
             currentUser.money += currentUser.click_per_click;
             await updateUserData();
             updateUserInfo();
-            // Анимация
             const btn = document.getElementById('clickerBtn');
             btn.style.transform = 'scale(0.95)';
             setTimeout(() => btn.style.transform = 'scale(1)', 100);
@@ -2094,7 +1956,7 @@
             }
         });
 
-        // ===== ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ НА СЕРВЕРЕ =====
+        // ===== ОБНОВЛЕНИЕ ДАННЫХ НА СЕРВЕРЕ =====
         async function updateUserData() {
             if (!currentUser) return;
             try {
@@ -2121,12 +1983,6 @@
                 const data = await res.json();
                 document.getElementById('pollCountYes').textContent = data.yes || 0;
                 document.getElementById('pollCountNo').textContent = data.no || 0;
-
-                // Проверяем, голосовал ли пользователь
-                if (currentUser) {
-                    const userRes = await fetch('/api/poll/' + currentUser.name);
-                    // Простой способ: если есть голос, блокируем кнопки
-                }
             } catch (e) {
                 console.error('Ошибка загрузки голосов:', e);
             }
@@ -2157,8 +2013,7 @@
             document.getElementById('pollError').textContent = '[ERROR] : ВЫ ВЫБРАЛИ НЕПРАВИЛЬНЫЙ ОТВЕТ 😵';
         });
 
-        // ===== ЛИДЕРБОРД =====
-        async function loadLeaderboard() {
+        // ===== ЛИДЕРБОРД =====        async function loadLeaderboard() {
             try {
                 const res = await fetch('/api/leaderboard');
                 const data = await res.json();
@@ -2189,15 +2044,51 @@
                     container.innerHTML = '<div class="chat-empty">Пока нет сообщений. Будьте первым!</div>';
                     return;
                 }
-                container.innerHTML = data.map(m => `
-                    <div class="chat-message">
-                        <span class="msg-user">${m.user}</span>: ${m.text}
-                        <span class="msg-time">${new Date(m.time).toLocaleString()}</span>
-                    </div>
-                `).join('');
+                container.innerHTML = data.map(m => {
+                    const canDelete = currentUser && (
+                        currentUser.name === m.user ||
+                        currentUser.admin === 1 ||
+                        currentUser.name === 'Великий Арбуз'
+                    );
+                    return `
+                        <div class="chat-message" data-id="${m.id}">
+                            <span class="msg-user">${m.user}</span>: ${m.text}
+                            <span class="msg-time">${new Date(m.time).toLocaleString()}</span>
+                            ${canDelete ? `
+                            <div class="msg-actions">
+                                <button class="delete-msg" onclick="deleteMessage(${m.id})">🗑️</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
                 container.scrollTop = container.scrollHeight;
             } catch (e) {
                 console.error('Ошибка загрузки чата:', e);
+            }
+        }
+
+        async function deleteMessage(id) {
+            if (!currentUser) return;
+            if (!confirm('Удалить это сообщение?')) return;
+
+            try {
+                const res = await fetch('/api/messages/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: currentUser.name })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadChat();
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({ type: 'delete', id }));
+                    }
+                } else {
+                    alert(data.error || 'Ошибка удаления');
+                }
+            } catch (e) {
+                alert('Ошибка соединения');
             }
         }
 
@@ -2217,7 +2108,6 @@
                 if (data.success) {
                     input.value = '';
                     loadChat();
-                    // Отправляем через WebSocket
                     if (ws && ws.readyState === WebSocket.OPEN) {
                         ws.send(JSON.stringify({ type: 'chat', user: currentUser.name, text }));
                     }
@@ -2233,6 +2123,124 @@
             if (e.key === 'Enter') document.getElementById('chatBtn').click();
         });
 
+        // ===== ЗАПИСИ =====
+        async function loadPosts() {
+            try {
+                const res = await fetch('/api/posts');
+                const data = await res.json();
+                const container = document.getElementById('postsList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="chat-empty">Пока нет записей. Создайте первую!</div>';
+                    return;
+                }
+                container.innerHTML = data.map(p => {
+                    const canEdit = currentUser && (
+                        currentUser.name === p.author ||
+                        currentUser.admin === 1 ||
+                        currentUser.name === 'Великий Арбуз'
+                    );
+                    return `
+                        <div class="record" data-id="${p.id}">
+                            <strong>${p.title}</strong><br />
+                            ${p.content}
+                            <div style="font-size:0.8rem; color:#666; margin-top:5px;">
+                                👤 ${p.author} · ${new Date(p.time).toLocaleString()}
+                            </div>
+                            ${canEdit ? `
+                            <div class="record-actions">
+                                <button class="edit-btn" onclick="editPost(${p.id})">✏️ Редактировать</button>
+                                <button class="delete-btn" onclick="deletePost(${p.id})">🗑️ Удалить</button>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+            } catch (e) {
+                console.error('Ошибка загрузки записей:', e);
+            }
+        }
+
+        document.getElementById('createPostBtn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const title = document.getElementById('postTitle').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            if (!title || !content) {
+                alert('Заполните заголовок и текст!');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        author: currentUser.name,
+                        title,
+                        content
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('postTitle').value = '';
+                    document.getElementById('postContent').value = '';
+                    loadPosts();
+                } else {
+                    alert(data.error || 'Ошибка создания записи');
+                }
+            } catch (e) {
+                alert('Ошибка соединения');
+            }
+        });
+
+        async function editPost(id) {
+            if (!currentUser) return;
+            const newTitle = prompt('Новый заголовок:');
+            if (newTitle === null) return;
+            const newContent = prompt('Новый текст:');
+            if (newContent === null) return;
+
+            try {
+                const res = await fetch('/api/posts/' + id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user: currentUser.name,
+                        title: newTitle.trim(),
+                        content: newContent.trim()
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadPosts();
+                } else {
+                    alert(data.error || 'Ошибка редактирования');
+                }
+            } catch (e) {
+                alert('Ошибка соединения');
+            }
+        }
+
+        async function deletePost(id) {
+            if (!currentUser) return;
+            if (!confirm('Удалить эту запись?')) return;
+
+            try {
+                const res = await fetch('/api/posts/' + id, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: currentUser.name })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    loadPosts();
+                } else {
+                    alert(data.error || 'Ошибка удаления');
+                }
+            } catch (e) {
+                alert('Ошибка соединения');
+            }
+        }
+
         // ===== WEBSOCKET =====
         function connectWebSocket() {
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
@@ -2246,8 +2254,11 @@
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    if (data.type === 'chat') {
+                    if (data.type === 'chat' || data.type === 'delete') {
                         loadChat();
+                    }
+                    if (data.type === 'post') {
+                        loadPosts();
                     }
                 } catch (e) {
                     console.error('Ошибка WebSocket:', e);
@@ -2259,75 +2270,6 @@
                 setTimeout(connectWebSocket, 3000);
             };
         }
-
-        // ===== СЕКРЕТНАЯ КОМНАТА =====
-        document.getElementById('secretAccessBtn').addEventListener('click', () => {
-            const code = document.getElementById('secretPasswordInput').value.trim();
-            if (code === '2305') {
-                document.getElementById('secretAccessError').textContent = '';
-                document.getElementById('secretPasswordInput').value = '';
-                // Открываем секретную комнату
-                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                document.getElementById('tab-secret').classList.add('active');
-                document.body.classList.add('secret-bg');
-                backBtn.classList.add('visible');
-                sideMenu.classList.remove('open');
-                menuOverlay.classList.remove('active');
-            } else {
-                document.getElementById('secretAccessError').textContent = '❌ Неверный код';
-                document.getElementById('secretPasswordInput').value = '';
-            }
-        });
-
-        // ===== СЕКРЕТНЫЙ ОПРОС =====
-        async function loadSecretPoll() {
-            if (!currentUser) return;
-            try {
-                const res = await fetch('/api/secret-poll/' + currentUser.name);
-                const data = await res.json();
-                const status = document.getElementById('secretPollStatus');
-                if (data.vote === 'yes') {
-                    document.getElementById('secretPollYes').classList.add('selected-yes');
-                    document.getElementById('secretPollYes').disabled = true;
-                    document.getElementById('secretPollNo').disabled = true;
-                    status.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
-                    status.style.color = '#88dd88';
-                } else if (data.vote === 'no') {
-                    document.getElementById('secretPollNo').classList.add('selected-no');
-                    document.getElementById('secretPollYes').disabled = true;
-                    document.getElementById('secretPollNo').disabled = true;
-                    status.textContent = '❌ Вы выбрали: "Я уже все решил"';
-                    status.style.color = '#dd8888';
-                }
-            } catch (e) {
-                console.error('Ошибка загрузки секретного опроса:', e);
-            }
-        }
-
-        document.getElementById('secretPollYes').addEventListener('click', async () => {
-            if (!currentUser) return;
-            try {
-                await fetch('/api/secret-poll', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user: currentUser.name, vote: 'yes' })
-                });
-                loadSecretPoll();
-            } catch (e) {}
-        });
-
-        document.getElementById('secretPollNo').addEventListener('click', async () => {
-            if (!currentUser) return;
-            try {
-                await fetch('/api/secret-poll', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user: currentUser.name, vote: 'no' })
-                });
-                loadSecretPoll();
-            } catch (e) {}
-        });
 
         // ===== ТАБЛИЦА ПОЛЬЗОВАТЕЛЕЙ (АДМИН) =====
         async function loadUsersList() {
@@ -2343,7 +2285,8 @@
                     <div class="user-row">
                         <span>${u.name}</span>
                         <span>
-                            ${u.admin === 1 ? '<span class="admin-tag">⭐ АДМИН</span>' : ''}
+                            ${u.name === 'Великий Арбуз' ? '<span class="owner-tag">👑 ВЛАДЕЛЕЦ</span>' : ''}
+                            ${u.admin === 1 && u.name !== 'Великий Арбуз' ? '<span class="admin-tag">⭐ АДМИН</span>' : ''}
                             ${u.banned === 1 ? '<span class="banned-tag">🚫 ЗАБАНЕН</span>' : ''}
                             <span style="color:#66ff66;">${u.money}🍉</span>
                         </span>
@@ -2359,6 +2302,11 @@
         // ===== АДМИН-КОМАНДЫ =====
         async function adminAction(endpoint, data) {
             try {
+                if (!currentUser || currentUser.admin !== 1) {
+                    alert('❌ Нет прав! Только админы и владелец могут это делать.');
+                    return;
+                }
+
                 data.admin = currentUser.name;
                 const res = await fetch(endpoint, {
                     method: 'POST',
@@ -2387,6 +2335,10 @@
         }
 
         document.getElementById('adminMoneyBtn').addEventListener('click', () => {
+            if (!currentUser || currentUser.admin !== 1) {
+                alert('❌ Нет прав! Только админы и владелец могут выдавать деньги.');
+                return;
+            }
             const target = document.getElementById('adminMoneyUsername').value.trim();
             const amount = parseInt(document.getElementById('adminMoneyAmount').value);
             if (!target || !amount || amount <= 0) return alert('Введите имя и сумму');
@@ -2394,26 +2346,50 @@
         });
 
         document.getElementById('adminBanBtn').addEventListener('click', () => {
+            if (!currentUser || currentUser.admin !== 1) {
+                alert('❌ Нет прав! Только админы и владелец могут банить.');
+                return;
+            }
             const target = document.getElementById('adminBanUsername').value.trim();
             if (!target) return alert('Введите имя');
             adminAction('/api/admin/ban', { target });
         });
 
         document.getElementById('adminUnbanBtn').addEventListener('click', () => {
+            if (!currentUser || currentUser.admin !== 1) {
+                alert('❌ Нет прав! Только админы и владелец могут разбанивать.');
+                return;
+            }
             const target = document.getElementById('adminBanUsername').value.trim();
             if (!target) return alert('Введите имя');
             adminAction('/api/admin/unban', { target });
         });
 
         document.getElementById('adminRoleBtn').addEventListener('click', () => {
+            if (!currentUser || currentUser.name !== 'Великий Арбуз') {
+                alert('❌ Только владелец может назначать админов!');
+                return;
+            }
             const target = document.getElementById('adminRoleUsername').value.trim();
             if (!target) return alert('Введите имя');
+            if (target === 'Великий Арбуз') {
+                alert('❌ Владелец уже админ!');
+                return;
+            }
             adminAction('/api/admin/give-admin', { target });
         });
 
         document.getElementById('adminUnroleBtn').addEventListener('click', () => {
+            if (!currentUser || currentUser.name !== 'Великий Арбуз') {
+                alert('❌ Только владелец может снимать админов!');
+                return;
+            }
             const target = document.getElementById('adminRoleUsername').value.trim();
             if (!target) return alert('Введите имя');
+            if (target === 'Великий Арбуз') {
+                alert('❌ Нельзя снять владельца!');
+                return;
+            }
             adminAction('/api/admin/remove-admin', { target });
         });
 
@@ -2467,7 +2443,6 @@
                 const price = SKINS[skin].price;
 
                 if (ownedSkins.includes(skin)) {
-                    // Выбрать скин
                     try {
                         await fetch('/api/select-skin', {
                             method: 'POST',
@@ -2483,7 +2458,6 @@
                     return;
                 }
 
-                // Купить скин
                 try {
                     const res = await fetch('/api/buy-skin', {
                         method: 'POST',
@@ -2572,15 +2546,9 @@
 
                 backBtn.classList.add('visible');
 
-                if (tabId === 'secret') {
-                    document.body.classList.add('secret-bg');
-                } else {
-                    document.body.classList.remove('secret-bg');
-                }
-
-                // Обновляем данные при переходе
                 if (tabId === 'leaders') loadLeaderboard();
                 if (tabId === 'chat') loadChat();
+                if (tabId === 'posts') loadPosts();
                 if (tabId === 'admin') loadUsersList();
             });
         });
@@ -2596,7 +2564,6 @@
             if (homeItem) homeItem.classList.add('active');
 
             backBtn.classList.add('visible');
-            document.body.classList.remove('secret-bg');
         });
 
         // ===== МЕНЮ =====
@@ -2790,14 +2757,14 @@
             }
         });
 
-        // Фокус на поле имени
         authName.focus();
 
         console.log('🍉 ARBUZERS SECRETS загружен!');
-        console.log('🔑 Пароль: 3417 (только для входа на сайт)');
-        console.log('🔮 Секретная комната: 2305');
+        console.log('👑 Владелец: Великий Арбуз (пароль: 3417)');
+        console.log('⭐ Админы: могут выдавать деньги и банить');
+        console.log('📝 Записи: создавайте и редактируйте!');
         console.log('🎵 Пасхалка FNAF: 1987');
     </script>
 
 </body>
-    </html>
+    </html> 
