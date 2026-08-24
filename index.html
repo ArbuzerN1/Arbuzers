@@ -12,7 +12,6 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-
         *::-webkit-scrollbar {
             display: none;
         }
@@ -274,54 +273,35 @@
             50% { opacity: 0.6; transform: scale(1.2); }
         }
 
-        .lock-screen {
+        /* ===== АВТОРИЗАЦИЯ ===== */
+        .auth-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            opacity: 1;
-            transform: translateX(0);
+            gap: 20px;
+            padding: 20px 0;
         }
 
-        .lock-screen.slide-out {
-            opacity: 0;
-            transform: translateX(100px);
-            pointer-events: none;
-            height: 0;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
-        .lock-screen label {
-            color: #ff4d4d;
-            font-size: 1.2rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-        }
-
-        .lock-screen input {
+        .auth-screen input {
             background: #1a1a1a;
             border: 2px solid #3a1a1a;
             border-radius: 50px;
             padding: 14px 24px;
             width: 100%;
             max-width: 280px;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             text-align: center;
             color: #ff9999;
             outline: none;
             transition: 0.3s;
-            letter-spacing: 3px;
         }
 
-        .lock-screen input:focus {
+        .auth-screen input:focus {
             border-color: #66ff66;
             box-shadow: 0 0 35px rgba(102, 255, 102, 0.15);
         }
 
-        .lock-screen button {
+        .auth-screen button {
             background: transparent;
             border: 2px solid #ff1a1a;
             color: #ff4d4d;
@@ -333,9 +313,11 @@
             transition: 0.3s;
             letter-spacing: 2px;
             background: rgba(255, 0, 0, 0.05);
+            width: 100%;
+            max-width: 280px;
         }
 
-        .lock-screen button:hover {
+        .auth-screen button:hover {
             background: #ff1a1a;
             color: #0a0a0a;
             border-color: #66ff66;
@@ -343,14 +325,32 @@
             transform: scale(1.05);
         }
 
-        .error-msg {
+        .auth-screen .auth-error {
             color: #ff3333;
             font-size: 0.95rem;
             min-height: 1.5rem;
-            margin-top: -10px;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
+        .auth-screen .auth-title {
+            color: #ffb3b3;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .auth-screen .auth-switch {
+            color: #666;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-screen .auth-switch:hover {
+            color: #ffb3b3;
+        }
+
+        /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
         .content {
             display: none;
             flex-direction: column;
@@ -384,6 +384,7 @@
             to { opacity: 1; transform: translateX(0) scale(1); }
         }
 
+        /* ===== Остальные стили (записи, опросы, комментарии, кликер, игра и т.д.) ===== */
         .intro-text {
             background: #141010;
             border-left: 6px solid #ff1a1a;
@@ -404,6 +405,27 @@
             top: 20px;
             font-size: 1.6rem;
             text-shadow: 0 0 20px #ff4444;
+        }
+
+        .user-info {
+            background: #141010;
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: #ffb3b3;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 1px solid #2a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .user-info strong {
+            color: #66ff66;
+        }
+
+        .user-info .admin-badge {
+            color: #ff4444;
+            font-weight: 700;
+            margin-left: 10px;
         }
 
         .quote-card {
@@ -541,6 +563,12 @@
             border: 2px solid #ff3333;
         }
 
+        .poll-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: scale(0.95);
+        }
+
         .poll-result {
             margin-top: 16px;
             color: #888;
@@ -562,7 +590,8 @@
             letter-spacing: 2px;
         }
 
-        .comments-section {
+        /* ===== ЧАТ ===== */
+        .chat-section {
             margin-top: 20px;
             padding: 24px 20px 20px;
             border-top: 2px solid #1f1a1a;
@@ -570,7 +599,7 @@
             background: rgba(20, 16, 16, 0.6);
         }
 
-        .comments-title {
+        .chat-title {
             color: #ffb3b3;
             font-size: 1.05rem;
             font-weight: 500;
@@ -579,14 +608,14 @@
             letter-spacing: 1px;
         }
 
-        .comments-list {
-            max-height: 200px;
+        .chat-messages {
+            max-height: 250px;
             overflow-y: auto;
             margin-bottom: 12px;
             padding-right: 8px;
         }
 
-        .comment-item {
+        .chat-message {
             background: rgba(26, 26, 26, 0.6);
             border-left: 3px solid #ff4d4d;
             padding: 10px 14px;
@@ -597,20 +626,25 @@
             line-height: 1.5;
         }
 
-        .comment-item .comment-time {
+        .chat-message .msg-user {
+            color: #66ff66;
+            font-weight: 600;
+        }
+
+        .chat-message .msg-time {
             color: #666;
             font-size: 0.75rem;
             display: block;
             margin-top: 4px;
         }
 
-        .comment-input-area {
+        .chat-input-area {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .comment-input-area input {
+        .chat-input-area input {
             flex: 1;
             min-width: 150px;
             background: #1a1a1a;
@@ -623,16 +657,16 @@
             transition: 0.3s;
         }
 
-        .comment-input-area input:focus {
+        .chat-input-area input:focus {
             border-color: #66ff66;
             box-shadow: 0 0 20px rgba(102, 255, 102, 0.1);
         }
 
-        .comment-input-area input::placeholder {
+        .chat-input-area input::placeholder {
             color: #555;
         }
 
-        .comment-input-area button {
+        .chat-input-area button {
             background: transparent;
             border: 1px solid #ff4d4d;
             color: #ff4d4d;
@@ -644,20 +678,21 @@
             font-size: 0.95rem;
         }
 
-        .comment-input-area button:hover {
+        .chat-input-area button:hover {
             background: #ff4d4d;
             color: #0a0a0a;
             border-color: #66ff66;
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
         }
 
-        .comment-empty {
+        .chat-empty {
             color: #444;
             text-align: center;
             font-size: 0.9rem;
             padding: 10px 0;
         }
 
+        /* ===== МЕНЮ ===== */
         .side-menu {
             position: fixed;
             top: 0;
@@ -730,6 +765,17 @@
             background: #ff4444;
             color: #0a0a0a;
             box-shadow: 0 0 40px rgba(255, 0, 0, 0.6);
+        }
+
+        .menu-item.private {
+            border-color: #7a4dff;
+            color: #b366ff;
+        }
+
+        .menu-item.private:hover {
+            background: #7a4dff;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(122, 77, 255, 0.4);
         }
 
         .menu-overlay {
@@ -993,33 +1039,7 @@
             min-height: 1.2rem;
         }
 
-        #fireworksCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        .footer-note {
-            text-align: right;
-            margin-top: 10px;
-            font-size: 0.85rem;
-            color: #4a2a2a;
-            letter-spacing: 2px;
-            border-top: 1px solid #1f1a1a;
-            padding-top: 18px;
-        }
-
-        .footer-note span {
-            background: linear-gradient(135deg, #ff1a1a, #66ff66);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
+        /* ===== КЛИКЕР ===== */
         .clicker-section {
             text-align: center;
             padding: 20px;
@@ -1079,300 +1099,7 @@
             cursor: not-allowed;
         }
 
-        .game-section {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .game-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 300px;
-            margin: 20px auto;
-        }
-
-        .game-cell {
-            width: 90px;
-            height: 90px;
-            background: #1a1a1a;
-            border: 2px solid #ff4444;
-            border-radius: 12px;
-            font-size: 2.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .game-cell:hover {
-            background: #2a0000;
-        }
-
-        .game-cell.win {
-            background: #2a2a00;
-            border-color: #66ff66;
-            box-shadow: 0 0 30px rgba(102, 255, 102, 0.4);
-        }
-
-        .game-score {
-            font-size: 1.5rem;
-            color: #ff6666;
-            margin: 15px 0;
-        }
-
-        .game-reset {
-            background: transparent;
-            border: 2px solid #ff4444;
-            color: #ff4444;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .game-reset:hover {
-            background: #ff4444;
-            color: white;
-        }
-
-        .daily-quote {
-            background: linear-gradient(135deg, #ff4444, #8a1a1a);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-        }
-
-        .daily-quote span {
-            display: block;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .profile-card {
-            background: #141010;
-            border: 2px solid #ff4444;
-            border-radius: 16px;
-            padding: 20px;
-            color: #ffb3b3;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .profile-card h3 {
-            color: #ff4444;
-            margin-bottom: 10px;
-        }
-
-        .profile-input {
-            background: #1a1a1a;
-            border: 2px solid #3a1a1a;
-            border-radius: 50px;
-            padding: 12px 24px;
-            width: 100%;
-            max-width: 300px;
-            font-size: 1.1rem;
-            text-align: center;
-            color: #ff9999;
-            outline: none;
-            transition: 0.3s;
-            margin-bottom: 10px;
-        }
-
-        .profile-input:focus {
-            border-color: #66ff66;
-            box-shadow: 0 0 35px rgba(102, 255, 102, 0.15);
-        }
-
-        .profile-btn {
-            background: transparent;
-            border: 2px solid #ff1a1a;
-            color: #ff4d4d;
-            padding: 12px 44px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            letter-spacing: 2px;
-        }
-
-        .profile-btn:hover {
-            background: #ff1a1a;
-            color: #0a0a0a;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
-        }
-
-        .profile-info {
-            font-size: 1.1rem;
-            color: #ff9999;
-            margin-top: 15px;
-        }
-
-        .profile-info span {
-            color: #66ff66;
-            font-weight: 700;
-        }
-
-        .transfer-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(20, 20, 20, 0.8);
-            border-radius: 16px;
-            border: 1px solid #ff4444;
-            text-align: center;
-        }
-
-        .transfer-section h4 {
-            color: #ff4444;
-            margin-bottom: 15px;
-        }
-
-        .transfer-input {
-            background: #1a1a1a;
-            border: 2px solid #3a1a1a;
-            border-radius: 50px;
-            padding: 10px 18px;
-            width: 100%;
-            max-width: 250px;
-            font-size: 1rem;
-            text-align: center;
-            color: #ff9999;
-            outline: none;
-            transition: 0.3s;
-            margin-bottom: 10px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .transfer-input:focus {
-            border-color: #66ff66;
-            box-shadow: 0 0 25px rgba(102, 255, 102, 0.1);
-        }
-
-        .transfer-btn {
-            background: transparent;
-            border: 2px solid #ff4444;
-            color: #ff4444;
-            padding: 10px 30px;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .transfer-btn:hover {
-            background: #ff4444;
-            color: white;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
-        }
-
-        .transfer-status {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            color: #ff9999;
-        }
-
-        .history-item {
-            background: rgba(20, 20, 20, 0.9);
-            border-left: 6px solid #ff4444;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            color: #ffcccc;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .history-item strong {
-            color: #ff4444;
-        }
-
-        .shop-section {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .skin-card {
-            background: #141010;
-            border: 2px solid #ff4444;
-            border-radius: 16px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .skin-card:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-        }
-
-        .skin-card .skin-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .skin-card .skin-name {
-            color: #ffcccc;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .skin-card .skin-price {
-            color: #ff6666;
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        .skin-card.owned {
-            border-color: #66ff66;
-            box-shadow: 0 0 20px rgba(102, 255, 102, 0.3);
-        }
-
-        .skin-card.selected {
-            background: #2a1a1a;
-            border-color: #ff4444;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-        }
-
-        .skin-card .buy-btn {
-            background: transparent;
-            border: 1px solid #ff4444;
-            color: #ff4444;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 8px;
-        }
-
-        .skin-card .buy-btn:hover {
-            background: #ff4444;
-            color: white;
-        }
-
+        /* ===== ЛИДЕРБОРД ===== */
         .leaderboard-section {
             text-align: center;
             padding: 20px;
@@ -1418,6 +1145,7 @@
             color: #66ff66;
         }
 
+        /* ===== АДМИН-ПАНЕЛЬ ===== */
         .admin-panel {
             padding: 20px;
             text-align: center;
@@ -1512,6 +1240,23 @@
             padding: 10px;
         }
 
+        .admin-users-table .user-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.95rem;
+        }
+
+        .admin-users-table .user-row .admin-tag {
+            color: #ff4444;
+            font-weight: 700;
+        }
+
+        .admin-users-table .user-row .banned-tag {
+            color: #ff6666;
+        }
+
         .admin-users-table button {
             background: transparent;
             border: 2px solid #ff4444;
@@ -1530,89 +1275,199 @@
             color: white;
         }
 
-        .post-controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            align-items: center;
+        /* ===== МАГАЗИН ===== */
+        .shop-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             margin: 20px 0;
         }
 
-        .post-controls button {
-            background: transparent;
+        .skin-card {
+            background: #141010;
             border: 2px solid #ff4444;
-            color: #ff4444;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 1.2rem;
+            border-radius: 16px;
+            padding: 15px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .post-controls button:hover {
+        .skin-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .skin-card .skin-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .skin-card .skin-name {
+            color: #ffcccc;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .skin-card .skin-price {
+            color: #ff6666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .skin-card.owned {
+            border-color: #66ff66;
+            box-shadow: 0 0 20px rgba(102, 255, 102, 0.3);
+        }
+
+        .skin-card.selected {
+            background: #2a1a1a;
+            border-color: #ff4444;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
+
+        .skin-card .buy-btn {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 8px;
+        }
+
+        .skin-card .buy-btn:hover {
             background: #ff4444;
             color: white;
         }
 
-        .post-controls span {
-            color: #ffcccc;
-            font-size: 1.1rem;
-        }
-
-        .post-card {
-            background: #141010;
-            border: 2px solid #ff4444;
-            border-radius: 16px;
-            padding: 20px;
+        /* ===== ИГРА ===== */
+        .game-section {
             text-align: center;
+            padding: 20px;
         }
 
-        .post-card .post-content {
-            color: #ffcccc;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            padding: 15px 0;
-            min-height: 100px;
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
         }
 
-        .post-card button {
+        .game-cell {
+            width: 90px;
+            height: 90px;
+            background: #1a1a1a;
+            border: 2px solid #ff4444;
+            border-radius: 12px;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-cell:hover {
+            background: #2a0000;
+        }
+
+        .game-cell.win {
+            background: #2a2a00;
+            border-color: #66ff66;
+            box-shadow: 0 0 30px rgba(102, 255, 102, 0.4);
+        }
+
+        .game-score {
+            font-size: 1.5rem;
+            color: #ff6666;
+            margin: 15px 0;
+        }
+
+        .game-reset {
             background: transparent;
             border: 2px solid #ff4444;
             color: #ff4444;
-            padding: 10px 24px;
+            padding: 12px 24px;
             border-radius: 50px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            margin: 10px 5px;
         }
 
-        .post-card button:hover {
+        .game-reset:hover {
             background: #ff4444;
             color: white;
         }
 
-        .post-comments {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #2a1a1a;
+        /* ===== ДРУГОЕ ===== */
+        .daily-quote {
+            background: linear-gradient(135deg, #ff4444, #8a1a1a);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
         }
 
-        .post-comments input {
-            background: #1a1a1a;
-            border: 1px solid #3a1a1a;
-            border-radius: 50px;
-            padding: 10px 18px;
+        .daily-quote span {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .history-item {
+            background: rgba(20, 20, 20, 0.9);
+            border-left: 6px solid #ff4444;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            color: #ffcccc;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .history-item strong {
+            color: #ff4444;
+        }
+
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 300px;
-            color: #ff9999;
-            outline: none;
-            margin: 10px 0;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        .post-comments input:focus {
-            border-color: #66ff66;
+        .footer-note {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #4a2a2a;
+            letter-spacing: 2px;
+            border-top: 1px solid #1f1a1a;
+            padding-top: 18px;
+        }
+
+        .footer-note span {
+            background: linear-gradient(135deg, #ff1a1a, #66ff66);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .is-mobile .interface-wrapper {
@@ -1650,13 +1505,13 @@
             font-size: 0.9rem;
         }
 
-        .is-mobile .comment-input-area input {
+        .is-mobile .chat-input-area input {
             min-width: 100px;
             font-size: 0.85rem;
             padding: 8px 14px;
         }
 
-        .is-mobile .comment-input-area button {
+        .is-mobile .chat-input-area button {
             padding: 8px 18px;
             font-size: 0.85rem;
         }
@@ -1670,13 +1525,13 @@
             padding: 14px;
         }
 
-        .is-mobile .lock-screen input {
-            max-width: 180px;
+        .is-mobile .auth-screen input {
+            max-width: 200px;
             font-size: 1rem;
             padding: 10px 14px;
         }
 
-        .is-mobile .lock-screen button {
+        .is-mobile .auth-screen button {
             padding: 8px 30px;
             font-size: 1rem;
         }
@@ -1739,7 +1594,7 @@
             letter-spacing: 2px;
         }
 
-        /* Стили для FNAF */
+        /* ===== FNAF ===== */
         .fnaf-error-screen {
             position: fixed;
             top: 0;
@@ -1819,17 +1674,16 @@
     <div class="side-menu" id="sideMenu">
         <h3>📂 РАЗДЕЛЫ</h3>
         <button class="menu-item active" data-tab="home">🏠 Главная</button>
+        <button class="menu-item" data-tab="chat">💬 Чат</button>
         <button class="menu-item" data-tab="facts">📜 Факты</button>
         <button class="menu-item" data-tab="opinions">💭 Мнения</button>
         <button class="menu-item" data-tab="history">📖 История</button>
-        <button class="menu-item" data-tab="community">💬 Обсуждение</button>
         <button class="menu-item" data-tab="clicker">🍉 Кликер</button>
         <button class="menu-item" data-tab="leaders">🏆 Лидеры</button>
         <button class="menu-item" data-tab="shop">🛒 Магазин</button>
         <button class="menu-item" data-tab="game">🎮 Мини-игра</button>
-        <button class="menu-item" data-tab="profile">👤 Профиль</button>
-        <button class="menu-item" data-tab="posts">📝 Посты</button>
-        <button class="menu-item" data-tab="admin">🛠️ Админ-панель</button>
+        <button class="menu-item private" data-tab="secret">🔮 Секретная комната</button>
+        <button class="menu-item" data-tab="admin" id="adminMenuBtn" style="display:none;">🛠️ Админ-панель</button>
     </div>
 
     <div class="interface-wrapper">
@@ -1843,19 +1697,26 @@
                 <div class="title-sparkle">✦</div>
             </div>
 
-            <!-- ЭКРАН ВХОДА -->
-            <div class="lock-screen" id="lockScreen">
-                <label>🔐 ВВЕДИТЕ ПАРОЛЬ</label>
-                <input type="password" id="passwordInput" placeholder="• • • •" maxlength="10" autofocus />
-                <button id="unlockBtn">ВОЙТИ</button>
-                <div class="error-msg" id="errorMsg"></div>
+            <!-- ===== АВТОРИЗАЦИЯ ===== -->
+            <div id="authScreen" class="auth-screen">
+                <div class="auth-title">🔐 ВХОД В СИСТЕМУ</div>
+                <input type="text" id="authName" placeholder="Имя пользователя" />
+                <input type="password" id="authPassword" placeholder="Пароль" />
+                <button id="authBtn">ВОЙТИ</button>
+                <div class="auth-error" id="authError"></div>
+                <span class="auth-switch" id="authSwitch">Нет аккаунта? Зарегистрироваться</span>
             </div>
 
-            <!-- ОСНОВНОЙ КОНТЕНТ -->
+            <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
             <div class="content" id="contentArea">
 
                 <!-- ГЛАВНАЯ -->
                 <div class="tab-content active" id="tab-home">
+                    <div class="user-info" id="userInfo">
+                        👤 <strong id="userNameDisplay">Гость</strong> | 🍉 <strong id="userMoneyDisplay">0</strong>
+                        <span class="admin-badge" id="adminBadge" style="display:none;">⭐ АДМИН</span>
+                    </div>
+
                     <div class="intro-text">
                         <strong>Это - официальный сайт Арбузеров.</strong><br />
                         Здесь будут выходить все важное, что не может попасть в канал. Здесь будут выходить закрытые мнения, интересные факты, а также самые страшные секреты. Но и кроме этого этот сайт будет сайтом развлечения! Код получат лишь те, кому можно довериться.
@@ -1885,6 +1746,20 @@
                         <input type="password" id="secretPasswordInput" placeholder="🔮 Код" maxlength="4" />
                         <button id="secretAccessBtn">🔓 Войти</button>
                         <div class="secret-error" id="secretAccessError"></div>
+                    </div>
+                </div>
+
+                <!-- ЧАТ -->
+                <div class="tab-content" id="tab-chat">
+                    <div class="chat-section">
+                        <div class="chat-title">💬 ОБЩИЙ ЧАТ</div>
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-empty">Загрузка...</div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Напишите сообщение..." maxlength="200" />
+                            <button id="chatBtn">Отправить</button>
+                        </div>
                     </div>
                 </div>
 
@@ -1925,20 +1800,6 @@
                     </div>
                 </div>
 
-                <!-- ОБСУЖДЕНИЕ -->
-                <div class="tab-content" id="tab-community">
-                    <div class="comments-section">
-                        <div class="comments-title">💬 Обсуждение комьюнити</div>
-                        <div class="comments-list" id="commentsList">
-                            <div class="comment-empty">Пока нет комментариев. Будьте первым!</div>
-                        </div>
-                        <div class="comment-input-area">
-                            <input type="text" id="commentInput" placeholder="Напишите что-нибудь..." maxlength="200" />
-                            <button id="commentBtn">Отправить</button>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- КЛИКЕР -->
                 <div class="tab-content" id="tab-clicker">
                     <div class="clicker-section">
@@ -1960,7 +1821,7 @@
                     <div class="leaderboard-section">
                         <h3 style="color:#ff4444; margin-bottom:20px;">🏆 ТАБЛИЦА ЛИДЕРОВ</h3>
                         <div class="leaderboard-list" id="leaderboardList">
-                            <div class="comment-empty">Загрузка...</div>
+                            <div class="chat-empty">Загрузка...</div>
                         </div>
                     </div>
                 </div>
@@ -2024,51 +1885,6 @@
                     </div>
                 </div>
 
-                <!-- ПОСТЫ -->
-                <div class="tab-content" id="tab-posts">
-                    <div class="post-feed">
-                        <div class="post-controls">
-                            <button id="prevPost">←</button>
-                            <span id="postCounter">1 / 1</span>
-                            <button id="nextPost">→</button>
-                        </div>
-
-                        <div class="post-card">
-                            <div class="post-content">
-                                <p id="postText">Пожалуйста, первый пост!</p>
-                            </div>
-
-                            <button id="openComments">💬 Открыть комментарии</button>
-
-                            <div class="post-comments" id="postComments" style="display: none;">
-                                <div id="commentsList"></div>
-                                <input type="text" id="commentInput" placeholder="Напишите комментарий..." />
-                                <button id="commentBtn">Отправить</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ПРОФИЛЬ -->
-                <div class="tab-content" id="tab-profile">
-                    <div class="profile-card">
-                        <h3>👤 Создание профиля</h3>
-                        <input type="text" id="profileName" class="profile-input" placeholder="Введите имя" maxlength="20" />
-                        <button class="profile-btn" id="saveProfileBtn">Сохранить профиль</button>
-                        <div class="profile-info" id="profileInfo">
-                            <span id="profileDisplay">Профиль не создан</span>
-                        </div>
-                    </div>
-
-                    <div class="transfer-section">
-                        <h4>💱 Обмен валюты</h4>
-                        <input type="text" id="transferName" class="transfer-input" placeholder="Имя получателя" maxlength="20" />
-                        <input type="number" id="transferAmount" class="transfer-input" placeholder="Сумма 🍉" min="1" />
-                        <button class="transfer-btn" id="transferBtn">Перевести</button>
-                        <div class="transfer-status" id="transferStatus"></div>
-                    </div>
-                </div>
-
                 <!-- СЕКРЕТНАЯ КОМНАТА -->
                 <div class="tab-content" id="tab-secret">
                     <div class="secret-room-tab">
@@ -2093,47 +1909,33 @@
                 <!-- АДМИН-ПАНЕЛЬ -->
                 <div class="tab-content" id="tab-admin">
                     <div class="admin-panel">
-                        <h2>🛠️ Админ-панель</h2>
+                        <h2>🛠️ АДМИН-ПАНЕЛЬ</h2>
 
                         <div class="admin-form">
-                            <h3>Выдать деньги</h3>
+                            <h3>💰 Выдать деньги</h3>
                             <input type="text" id="adminMoneyUsername" placeholder="Имя" />
                             <input type="number" id="adminMoneyAmount" placeholder="Сумма" />
                             <button id="adminMoneyBtn">Выдать</button>
                         </div>
 
                         <div class="admin-form">
-                            <h3>Забанить / Разбанить</h3>
+                            <h3>🔨 Забанить / Разбанить</h3>
                             <input type="text" id="adminBanUsername" placeholder="Имя" />
                             <button id="adminBanBtn">Забанить</button>
                             <button id="adminUnbanBtn">Разбанить</button>
                         </div>
 
                         <div class="admin-form">
-                            <h3>Дать / Снять роль</h3>
+                            <h3>⭐ Дать / Снять админа</h3>
                             <input type="text" id="adminRoleUsername" placeholder="Имя" />
                             <button id="adminRoleBtn">Дать админа</button>
                             <button id="adminUnroleBtn">Снять админа</button>
                         </div>
 
-                        <div class="admin-form">
-                            <h3>Запретить / Разрешить комментарии</h3>
-                            <input type="text" id="adminCommentUsername" placeholder="Имя" />
-                            <button id="adminCommentBtn">Запретить</button>
-                            <button id="adminUncommentBtn">Разрешить</button>
-                        </div>
-
-                        <div class="admin-form">
-                            <h3>Писать новости</h3>
-                            <input type="text" id="adminNewsTitle" placeholder="Заголовок" />
-                            <textarea id="adminNewsContent" placeholder="Текст новости"></textarea>
-                            <button id="adminNewsBtn">Отправить</button>
-                        </div>
-
                         <div class="admin-users-table">
-                            <h3>Таблица пользователей</h3>
+                            <h3>📋 Таблица пользователей</h3>
                             <div id="usersList"></div>
-                            <button id="showMoreUsers">Смотреть больше</button>
+                            <button id="showMoreUsers">Обновить</button>
                         </div>
                     </div>
                 </div>
@@ -2147,825 +1949,855 @@
 
     <script>
         // ============================================================
-        // ВСЕ СКРИПТЫ
+        // ПОЛНЫЙ КЛИЕНТСКИЙ СКРИПТ
         // ============================================================
 
-        document.addEventListener('DOMContentLoaded', function() {
+        let currentUser = null;
+        let ws = null;
 
-            const menuBtn = document.getElementById('menuBtn');
-            const sideMenu = document.getElementById('sideMenu');
-            const menuOverlay = document.getElementById('menuOverlay');
-            const backBtn = document.getElementById('backBtn');
-            const contentArea = document.getElementById('contentArea');
-            const lockScreen = document.getElementById('lockScreen');
-            const passwordInput = document.getElementById('passwordInput');
-            const unlockBtn = document.getElementById('unlockBtn');
-            const errorMsg = document.getElementById('errorMsg');
+        // ===== АВТОРИЗАЦИЯ =====
+        const authScreen = document.getElementById('authScreen');
+        const authName = document.getElementById('authName');
+        const authPassword = document.getElementById('authPassword');
+        const authBtn = document.getElementById('authBtn');
+        const authError = document.getElementById('authError');
+        const authSwitch = document.getElementById('authSwitch');
+        let isLogin = true;
 
-            const secretPasswordInput = document.getElementById('secretPasswordInput');
-            const secretAccessBtn = document.getElementById('secretAccessBtn');
-            const secretAccessError = document.getElementById('secretAccessError');
+        const contentArea = document.getElementById('contentArea');
+        const menuBtn = document.getElementById('menuBtn');
+        const backBtn = document.getElementById('backBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
 
-            const PASSWORD = '3417';
-            const SECRET_PASSWORD = '2305';
-            let isLoggedIn = false;
+        authSwitch.addEventListener('click', () => {
+            isLogin = !isLogin;
+            authBtn.textContent = isLogin ? 'ВОЙТИ' : 'ЗАРЕГИСТРИРОВАТЬСЯ';
+            authSwitch.textContent = isLogin ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+            authError.textContent = '';
+        });
 
-            // ===== ВХОД =====
-            function handleLogin() {
-                const entered = passwordInput.value.trim();
-                if (entered === PASSWORD) {
-                    isLoggedIn = true;
-                    lockScreen.classList.add('slide-out');
-                    setTimeout(() => {
-                        lockScreen.style.display = 'none';
-                        contentArea.classList.add('active');
-                        menuBtn.classList.add('visible');
-                        backBtn.classList.add('visible');
-                    }, 600);
-                } else {
-                    errorMsg.textContent = '❌ Неверный пароль. Попробуйте снова.';
-                    passwordInput.value = '';
-                    passwordInput.focus();
-                }
+        authBtn.addEventListener('click', async () => {
+            const name = authName.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!name || !password) {
+                authError.textContent = '❌ Введите имя и пароль';
+                return;
             }
 
-            unlockBtn.addEventListener('click', handleLogin);
-            passwordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleLogin();
-                }
-            });
-
-            // ===== ВХОД В СЕКРЕТНУЮ КОМНАТУ =====
-            function openSecretRoom() {
-                const entered = secretPasswordInput.value.trim();
-                if (entered === SECRET_PASSWORD) {
-                    secretAccessError.textContent = '';
-                    secretPasswordInput.value = '';
-
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    tabContents.forEach(t => t.classList.remove('active'));
-
-                    const secretTab = document.getElementById('tab-secret');
-                    if (secretTab) secretTab.classList.add('active');
-
-                    document.body.classList.add('secret-bg');
-                    backBtn.classList.add('visible');
-
-                    menuBtn.classList.remove('open');
-                    sideMenu.classList.remove('open');
-                    menuOverlay.classList.remove('active');
-                } else {
-                    secretAccessError.textContent = '❌ Неверный код. Попробуйте снова.';
-                    secretPasswordInput.value = '';
-                    secretPasswordInput.focus();
-                }
-            }
-
-            secretAccessBtn.addEventListener('click', openSecretRoom);
-            secretPasswordInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    openSecretRoom();
-                }
-            });
-
-            // ===== МЕНЮ =====
-            menuBtn.addEventListener('click', () => {
-                menuBtn.classList.toggle('open');
-                sideMenu.classList.toggle('open');
-                menuOverlay.classList.toggle('active');
-            });
-
-            menuOverlay.addEventListener('click', () => {
-                menuBtn.classList.remove('open');
-                sideMenu.classList.remove('open');
-                menuOverlay.classList.remove('active');
-            });
-
-            // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
-            const menuItems = document.querySelectorAll('.menu-item');
-            const tabContents = document.querySelectorAll('.tab-content');
-
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    menuItems.forEach(i => i.classList.remove('active'));
-                    tabContents.forEach(t => t.classList.remove('active'));
-
-                    this.classList.add('active');
-                    const tabId = this.dataset.tab;
-                    const targetTab = document.getElementById('tab-' + tabId);
-                    if (targetTab) {
-                        targetTab.classList.add('active');
-                    }
-
-                    menuBtn.classList.remove('open');
-                    sideMenu.classList.remove('open');
-                    menuOverlay.classList.remove('active');
-
-                    backBtn.classList.add('visible');
-
-                    if (tabId === 'secret') {
-                        document.body.classList.add('secret-bg');
-                    } else {
-                        document.body.classList.remove('secret-bg');
-                    }
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, password })
                 });
-            });
+                const data = await res.json();
 
-            // ===== КНОПКА НАЗАД =====
-            backBtn.addEventListener('click', () => {
-                menuItems.forEach(i => i.classList.remove('active'));
-                tabContents.forEach(t => t.classList.remove('active'));
+                if (data.success) {
+                    currentUser = data.user;
+                    authScreen.style.display = 'none';
+                    contentArea.classList.add('active');
+                    menuBtn.classList.add('visible');
+                    backBtn.classList.add('visible');
 
-                const homeTab = document.getElementById('tab-home');
-                const homeItem = document.querySelector('[data-tab="home"]');
-                if (homeTab) homeTab.classList.add('active');
-                if (homeItem) homeItem.classList.add('active');
-
-                backBtn.classList.add('visible');
-                document.body.classList.remove('secret-bg');
-            });
-
-            // ===== ОПРОС НА ГЛАВНОЙ =====
-            const pollYes = document.getElementById('pollYes');
-            const pollNo = document.getElementById('pollNo');
-            const pollCountYes = document.getElementById('pollCountYes');
-            const pollCountNo = document.getElementById('pollCountNo');
-            const pollError = document.getElementById('pollError');
-
-            const STORAGE_KEY = 'arbuzers_poll_votes';
-            const USER_KEY = 'arbuzers_user_vote';
-
-            let votes = { yes: 0, no: 0 };
-            let userVote = null;
-
-            function loadPollData() {
-                const stored = localStorage.getItem(STORAGE_KEY);
-                if (stored) {
-                    try {
-                        const parsed = JSON.parse(stored);
-                        votes.yes = parsed.yes || 0;
-                        votes.no = parsed.no || 0;
-                    } catch (e) {}
-                }
-                userVote = localStorage.getItem(USER_KEY) || null;
-                updatePollUI();
-            }
-
-            function savePollData() {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(votes));
-                if (userVote) {
-                    localStorage.setItem(USER_KEY, userVote);
-                } else {
-                    localStorage.removeItem(USER_KEY);
-                }
-                updatePollUI();
-            }
-
-            function updatePollUI() {
-                pollCountYes.textContent = votes.yes;
-                pollCountNo.textContent = votes.no;
-                pollYes.classList.remove('selected-yes', 'selected-no');
-                pollNo.classList.remove('selected-yes', 'selected-no');
-                if (userVote === 'yes') {
-                    pollYes.classList.add('selected-yes');
-                } else if (userVote === 'no') {
-                    pollNo.classList.add('selected-no');
-                }
-            }
-
-            function handlePollVote(choice) {
-                if (!isLoggedIn) return;
-                if (userVote === choice) {
-                    if (choice === 'yes') {
-                        votes.yes = Math.max(0, votes.yes - 1);
-                    } else {
-                        votes.no = Math.max(0, votes.no - 1);
+                    // Показываем админ-меню если есть права
+                    if (currentUser.admin === 1) {
+                        document.getElementById('adminMenuBtn').style.display = 'block';
+                        document.getElementById('adminBadge').style.display = 'inline';
                     }
-                    userVote = null;
-                    pollError.textContent = '';
-                    savePollData();
-                    return;
-                }
-                if (userVote === 'yes' && choice === 'no') {
-                    votes.yes = Math.max(0, votes.yes - 1);
-                    votes.no += 1;
-                    userVote = 'no';
-                    pollError.textContent = '';
-                    savePollData();
-                    showPollError();
-                    return;
-                }
-                if (userVote === 'no' && choice === 'yes') {
-                    votes.no = Math.max(0, votes.no - 1);
-                    votes.yes += 1;
-                    userVote = 'yes';
-                    pollError.textContent = '';
-                    savePollData();
-                    launchFireworks();
-                    return;
-                }
-                if (userVote === null) {
-                    if (choice === 'yes') {
-                        votes.yes += 1;
-                        userVote = 'yes';
-                        pollError.textContent = '';
-                        savePollData();
-                        launchFireworks();
-                    } else {
-                        votes.no += 1;
-                        userVote = 'no';
-                        pollError.textContent = '';
-                        savePollData();
-                        showPollError();
-                    }
-                }
-            }
 
-            function showPollError() {
-                pollError.textContent = '[ERROR] : ВЫ ВЫБРАЛИ НЕПРАВИЛЬНЫЙ ОТВЕТ 😵';
-                document.getElementById('pollSection').classList.add('flash-error');
-                setTimeout(() => document.getElementById('pollSection').classList.remove('flash-error'), 1000);
-            }
+                    updateUserInfo();
+                    loadPoll();
+                    loadLeaderboard();
+                    loadChat();
+                    connectWebSocket();
+                    loadSecretPoll();
+                    loadUsersList();
+                    loadSkins();
 
-            pollYes.addEventListener('click', () => handlePollVote('yes'));
-            pollNo.addEventListener('click', () => handlePollVote('no'));
-            loadPollData();
-
-            // ===== ФЕЙЕРВЕРК =====
-            let fireworksActive = false;
-            let fwCanvas, fwCtx, particles = [];
-
-            function launchFireworks() {
-                if (fireworksActive) return;
-                fireworksActive = true;
-                fwCanvas = document.getElementById('fireworksCanvas');
-                fwCanvas.width = window.innerWidth;
-                fwCanvas.height = window.innerHeight;
-                fwCtx = fwCanvas.getContext('2d');
-                const colors = ['#ff4444', '#66ff66', '#ffaa00', '#ff66ff', '#44ddff', '#ff3333', '#88ff88'];
-                const count = 80;
-                for (let i = 0; i < count; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 6 + 2;
-                    const x = Math.random() * fwCanvas.width;
-                    const y = Math.random() * fwCanvas.height * 0.6 + fwCanvas.height * 0.1;
-                    particles.push({
-                        x: x,
-                        y: y,
-                        vx: Math.cos(angle) * speed * (Math.random() * 0.8 + 0.2),
-                        vy: Math.sin(angle) * speed * (Math.random() * 0.8 + 0.2) - 2,
-                        life: 1,
-                        decay: Math.random() * 0.015 + 0.005,
-                        size: Math.random() * 4 + 2,
-                        color: colors[Math.floor(Math.random() * colors.length)]
-                    });
-                }
-                let frame = 0;
-
-                function drawFireworks() {
-                    if (particles.length === 0 || frame > 120) {
-                        fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-                        fireworksActive = false;
-                        particles = [];
-                        return;
-                    }
-                    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-                    for (let i = particles.length - 1; i >= 0; i--) {
-                        const p = particles[i];
-                        p.x += p.vx;
-                        p.y += p.vy;
-                        p.vy += 0.06;
-                        p.life -= p.decay;
-                        if (p.life <= 0) {
-                            particles.splice(i, 1);
-                            continue;
+                    // Автокликер
+                    setInterval(() => {
+                        if (currentUser && currentUser.auto_clicker > 0) {
+                            clickAuto();
                         }
-                        fwCtx.globalAlpha = p.life;
-                        fwCtx.beginPath();
-                        fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-                        fwCtx.fillStyle = p.color;
-                        fwCtx.fill();
-                        fwCtx.shadowColor = p.color;
-                        fwCtx.shadowBlur = 20;
-                        fwCtx.fill();
-                        fwCtx.shadowBlur = 0;
-                    }
-                    fwCtx.globalAlpha = 1;
-                    frame++;
-                    requestAnimationFrame(drawFireworks);
+                    }, 1000);
+
+                } else {
+                    authError.textContent = '❌ ' + (data.error || 'Ошибка');
                 }
-                drawFireworks();
-                setTimeout(() => {
-                    fireworksActive = false;
-                    particles = [];
-                    if (fwCtx) fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-                }, 5000);
+            } catch (e) {
+                authError.textContent = '❌ Ошибка соединения с сервером';
             }
+        });
 
-            window.addEventListener('resize', () => {
-                if (fwCanvas) {
-                    fwCanvas.width = window.innerWidth;
-                    fwCanvas.height = window.innerHeight;
-                }
-            });
+        authPassword.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') authBtn.click();
+        });
 
-            // ===== КОММЕНТАРИИ =====
-            const COMMENTS_KEY = 'arbuzers_comments';
-            const commentInput = document.getElementById('commentInput');
-            const commentBtn = document.getElementById('commentBtn');
-            const commentsList = document.getElementById('commentsList');
+        authName.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') authPassword.focus();
+        });
 
-            function loadComments() {
-                const stored = localStorage.getItem(COMMENTS_KEY);
-                let comments = [];
-                if (stored) {
-                    try {
-                        comments = JSON.parse(stored);
-                    } catch (e) {}
-                }
-                renderComments(comments);
+        // ===== ОБНОВЛЕНИЕ ИНФОРМАЦИИ ПОЛЬЗОВАТЕЛЯ =====
+        function updateUserInfo() {
+            if (!currentUser) return;
+            document.getElementById('userNameDisplay').textContent = currentUser.name;
+            document.getElementById('userMoneyDisplay').textContent = currentUser.money;
+            document.getElementById('clickerMoney').textContent = currentUser.money;
+            document.getElementById('clickerPerClick').textContent = '+' + currentUser.click_per_click + ' за клик';
+        }
+
+        // ===== КЛИКЕР =====
+        document.getElementById('clickerBtn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            currentUser.money += currentUser.click_per_click;
+            await updateUserData();
+            updateUserInfo();
+            // Анимация
+            const btn = document.getElementById('clickerBtn');
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 100);
+        });
+
+        async function clickAuto() {
+            if (!currentUser) return;
+            currentUser.money += currentUser.auto_clicker;
+            await updateUserData();
+            updateUserInfo();
+        }
+
+        // ===== УЛУЧШЕНИЯ =====
+        document.getElementById('upgradeClick').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const cost = 50;
+            if (currentUser.money >= cost) {
+                currentUser.money -= cost;
+                currentUser.click_per_click += 1;
+                await updateUserData();
+                updateUserInfo();
+            } else {
+                alert('Недостаточно 🍉!');
             }
+        });
 
-            function renderComments(comments) {
-                if (!comments || comments.length === 0) {
-                    commentsList.innerHTML = '<div class="comment-empty">Пока нет комментариев. Будьте первым!</div>';
-                    return;
-                }
-                let html = '';
-                comments.forEach(c => {
-                    const time = new Date(c.time).toLocaleString('ru-RU', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    html += `
-                        <div class="comment-item">
-                            ${c.text}
-                            <span class="comment-time">${time}</span>
-                        </div>
-                    `;
+        document.getElementById('upgradeAuto').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const cost = 100;
+            if (currentUser.money >= cost) {
+                currentUser.money -= cost;
+                currentUser.auto_clicker += 1;
+                await updateUserData();
+                updateUserInfo();
+            } else {
+                alert('Недостаточно 🍉!');
+            }
+        });
+
+        // ===== ОБНОВЛЕНИЕ ДАННЫХ ПОЛЬЗОВАТЕЛЯ НА СЕРВЕРЕ =====
+        async function updateUserData() {
+            if (!currentUser) return;
+            try {
+                await fetch('/api/user/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: currentUser.name,
+                        money: currentUser.money,
+                        click_per_click: currentUser.click_per_click,
+                        auto_clicker: currentUser.auto_clicker,
+                        skin: currentUser.skin
+                    })
                 });
-                commentsList.innerHTML = html;
-                commentsList.scrollTop = commentsList.scrollHeight;
+            } catch (e) {
+                console.error('Ошибка сохранения:', e);
             }
+        }
 
-            function addComment() {
-                if (!isLoggedIn) return;
-                const text = commentInput.value.trim();
-                if (!text) return;
-                const stored = localStorage.getItem(COMMENTS_KEY);
-                let comments = [];
-                if (stored) {
-                    try {
-                        comments = JSON.parse(stored);
-                    } catch (e) {}
+        // ===== ГОЛОСОВАНИЕ =====
+        async function loadPoll() {
+            try {
+                const res = await fetch('/api/poll');
+                const data = await res.json();
+                document.getElementById('pollCountYes').textContent = data.yes || 0;
+                document.getElementById('pollCountNo').textContent = data.no || 0;
+
+                // Проверяем, голосовал ли пользователь
+                if (currentUser) {
+                    const userRes = await fetch('/api/poll/' + currentUser.name);
+                    // Простой способ: если есть голос, блокируем кнопки
                 }
-                comments.push({ text: text, time: Date.now() });
-                localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-                commentInput.value = '';
-                renderComments(comments);
+            } catch (e) {
+                console.error('Ошибка загрузки голосов:', e);
             }
+        }
 
-            commentBtn.addEventListener('click', addComment);
-            commentInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    addComment();
-                }
+        document.getElementById('pollYes').addEventListener('click', async () => {
+            if (!currentUser) return;
+            await fetch('/api/poll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: currentUser.name, vote: 'yes' })
             });
-            loadComments();
+            loadPoll();
+            document.getElementById('pollYes').disabled = true;
+            document.getElementById('pollNo').disabled = true;
+        });
 
-            // ===== ОПРОС В СЕКРЕТНОЙ КОМНАТЕ =====
-            const secretPollYes = document.getElementById('secretPollYes');
-            const secretPollNo = document.getElementById('secretPollNo');
-            const secretPollStatus = document.getElementById('secretPollStatus');
-            const SECRET_POLL_KEY = 'arbuzers_secret_poll';
-
-            function loadSecretPoll() {
-                const stored = localStorage.getItem(SECRET_POLL_KEY);
-                if (stored) {
-                    const choice = stored;
-                    if (choice === 'yes') {
-                        secretPollYes.classList.add('selected-yes');
-                        secretPollYes.disabled = true;
-                        secretPollNo.disabled = true;
-                        secretPollStatus.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
-                        secretPollStatus.style.color = '#88dd88';
-                    } else if (choice === 'no') {
-                        secretPollNo.classList.add('selected-no');
-                        secretPollYes.disabled = true;
-                        secretPollNo.disabled = true;
-                        secretPollStatus.textContent = '❌ Вы выбрали: "Я уже все решил"';
-                        secretPollStatus.style.color = '#dd8888';
-                    }
-                } else {
-                    secretPollYes.classList.remove('selected-yes', 'selected-no');
-                    secretPollNo.classList.remove('selected-yes', 'selected-no');
-                    secretPollYes.disabled = false;
-                    secretPollNo.disabled = false;
-                    secretPollStatus.textContent = 'Вы ещё не ответили';
-                    secretPollStatus.style.color = '#8877aa';
-                }
-            }
-
-            function handleSecretVote(choice) {
-                if (!isLoggedIn) return;
-                const stored = localStorage.getItem(SECRET_POLL_KEY);
-                if (stored) return;
-                localStorage.setItem(SECRET_POLL_KEY, choice);
-                if (choice === 'yes') {
-                    secretPollYes.classList.add('selected-yes');
-                    secretPollYes.disabled = true;
-                    secretPollNo.disabled = true;
-                    secretPollStatus.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
-                    secretPollStatus.style.color = '#88dd88';
-                } else {
-                    secretPollNo.classList.add('selected-no');
-                    secretPollYes.disabled = true;
-                    secretPollNo.disabled = true;
-                    secretPollStatus.textContent = '❌ Вы выбрали: "Я уже все решил"';
-                    secretPollStatus.style.color = '#dd8888';
-                }
-            }
-
-            secretPollYes.addEventListener('click', () => handleSecretVote('yes'));
-            secretPollNo.addEventListener('click', () => handleSecretVote('no'));
-            loadSecretPoll();
-
-            // ===== ПАСХАЛКА 1987 (FNAF) =====
-            let fnafTriggered = false;
-            let keyBuffer = '';
-
-            function playFnafMusic() {
-                if (fnafTriggered || !isLoggedIn) return;
-                fnafTriggered = true;
-                try {
-                    const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                    const notes = [
-                        { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
-                        { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
-                        { freq: 466.16, dur: 0.4 }, { freq: 415.30, dur: 0.2 },
-                        { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.2 },
-                        { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.4 },
-                        { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
-                        { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
-                        { freq: 369.99, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
-                        { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
-                        { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
-                        { freq: 311.13, dur: 0.4 }, { freq: 466.16, dur: 0.15 },
-                        { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.15 },
-                        { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.3 },
-                        { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
-                        { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
-                        { freq: 415.30, dur: 0.3 }, { freq: 369.99, dur: 0.15 },
-                        { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.15 },
-                        { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.3 },
-                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
-                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
-                        { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
-                    ];
-                    let time = 0;
-                    notes.forEach(note => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.type = 'sawtooth';
-                        osc.frequency.value = note.freq;
-                        gain.gain.setValueAtTime(0.12, audioCtx.currentTime + time);
-                        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + time + note.dur);
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start(audioCtx.currentTime + time);
-                        osc.stop(audioCtx.currentTime + time + note.dur);
-                        time += note.dur + 0.01;
-                    });
-                    showFnafScreen();
-                } catch (e) {
-                    console.log('Audio not supported');
-                }
-            }
-
-            function showFnafScreen() {
-                const div = document.createElement('div');
-                div.className = 'fnaf-error-screen';
-                div.innerHTML = `
-                    <h2>⚠️ ERROR</h2>
-                    <p>POWER OUTAGE • 1987</p>
-                    <p style="font-size:0.8rem; margin-top:30px; opacity:0.4;">🔴 • 🔴 • 🔴</p>
-                `;
-                document.body.appendChild(div);
-                setTimeout(() => {
-                    div.style.animation = 'fnafFlicker 0.2s ease 8';
-                }, 100);
-                setTimeout(() => {
-                    div.remove();
-                }, 5000);
-            }
-
-            document.addEventListener('keydown', (e) => {
-                if (!isLoggedIn || fnafTriggered) return;
-                if (e.key >= '0' && e.key <= '9') {
-                    keyBuffer += e.key;
-                    if (keyBuffer.length > 4) keyBuffer = keyBuffer.slice(-4);
-                    if (keyBuffer === '1987') {
-                        playFnafMusic();
-                        keyBuffer = '';
-                    }
-                } else {
-                    keyBuffer = '';
-                }
+        document.getElementById('pollNo').addEventListener('click', async () => {
+            if (!currentUser) return;
+            await fetch('/api/poll', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: currentUser.name, vote: 'no' })
             });
+            loadPoll();
+            document.getElementById('pollYes').disabled = true;
+            document.getElementById('pollNo').disabled = true;
+            document.getElementById('pollError').textContent = '[ERROR] : ВЫ ВЫБРАЛИ НЕПРАВИЛЬНЫЙ ОТВЕТ 😵';
+        });
 
-            document.addEventListener('input', (e) => {
-                if (!isLoggedIn || fnafTriggered) return;
-                const val = e.target.value;
-                if (typeof val === 'string' && val.includes('1987')) {
-                    playFnafMusic();
-                    e.target.value = val.replace('1987', '');
-                }
-            });
-
-            // ===== КЛИКЕР =====
-            let clickerMoney = parseInt(localStorage.getItem('clickerMoney') || '0');
-            let clickPerClick = parseInt(localStorage.getItem('clickPerClick') || '1');
-            let autoClicker = parseInt(localStorage.getItem('autoClicker') || '0');
-
-            const clickerMoneyEl = document.getElementById('clickerMoney');
-            const clickerPerClickEl = document.getElementById('clickerPerClick');
-            const clickerBtn = document.getElementById('clickerBtn');
-            const upgradeClickBtn = document.getElementById('upgradeClick');
-            const upgradeAutoBtn = document.getElementById('upgradeAuto');
-
-            function updateClickerUI() {
-                clickerMoneyEl.textContent = clickerMoney;
-                clickerPerClickEl.textContent = '+' + clickPerClick + ' за клик';
-                localStorage.setItem('clickerMoney', clickerMoney.toString());
-                localStorage.setItem('clickPerClick', clickPerClick.toString());
-                localStorage.setItem('autoClicker', autoClicker.toString());
-            }
-
-            clickerBtn.addEventListener('click', () => {
-                if (!isLoggedIn) return;
-                clickerMoney += clickPerClick;
-                updateClickerUI();
-                clickerBtn.style.transform = 'scale(0.95)';
-                setTimeout(() => { clickerBtn.style.transform = 'scale(1)'; }, 100);
-            });
-
-            upgradeClickBtn.addEventListener('click', () => {
-                if (!isLoggedIn) return;
-                if (clickerMoney >= 50) {
-                    clickerMoney -= 50;
-                    clickPerClick += 1;
-                    updateClickerUI();
-                } else {
-                    alert('Недостаточно 🍉!');
-                }
-            });
-
-            upgradeAutoBtn.addEventListener('click', () => {
-                if (!isLoggedIn) return;
-                if (clickerMoney >= 100) {
-                    clickerMoney -= 100;
-                    autoClicker += 1;
-                    updateClickerUI();
-                } else {
-                    alert('Недостаточно 🍉!');
-                }
-            });
-
-            setInterval(() => {
-                if (isLoggedIn && autoClicker > 0) {
-                    clickerMoney += autoClicker;
-                    updateClickerUI();
-                }
-            }, 1000);
-
-            updateClickerUI();
-
-            // ===== ИГРА =====
-            const gameCells = document.querySelectorAll('.game-cell');
-            const gameScoreEl = document.getElementById('gameScore');
-            const gameResetBtn = document.getElementById('gameReset');
-            let gameScore = 0;
-            let gameActive = true;
-
-            function startGame() {
-                gameActive = true;
-                gameCells.forEach(cell => {
-                    cell.textContent = '';
-                    cell.classList.remove('win');
-                    cell.style.background = '#1a1a1a';
-                });
-                const randomIndex = Math.floor(Math.random() * 9);
-                setTimeout(() => {
-                    if (gameActive) {
-                        gameCells[randomIndex].textContent = '🍉';
-                        gameCells[randomIndex].style.background = '#2a2a00';
-                    }
-                }, 500);
-            }
-
-            gameCells.forEach((cell, index) => {
-                cell.addEventListener('click', () => {
-                    if (!isLoggedIn || !gameActive) return;
-                    if (cell.textContent === '🍉') {
-                        gameScore += 10;
-                        gameScoreEl.textContent = gameScore;
-                        cell.classList.add('win');
-                        cell.textContent = '🎉';
-                        gameActive = false;
-                        setTimeout(startGame, 1500);
-                    } else {
-                        cell.style.background = '#2a0000';
-                        setTimeout(() => { cell.style.background = '#1a1a1a'; }, 300);
-                    }
-                });
-            });
-
-            gameResetBtn.addEventListener('click', () => {
-                gameScore = 0;
-                gameScoreEl.textContent = '0';
-                startGame();
-            });
-
-            startGame();
-
-            // ===== ПРОФИЛЬ =====
-            const profileName = document.getElementById('profileName');
-            const saveProfileBtn = document.getElementById('saveProfileBtn');
-            const profileDisplay = document.getElementById('profileDisplay');
-
-            function loadProfile() {
-                const saved = localStorage.getItem('arbuzers_profile');
-                if (saved) {
-                    profileDisplay.textContent = '👤 ' + saved;
-                }
-            }
-
-            saveProfileBtn.addEventListener('click', () => {
-                const name = profileName.value.trim();
-                if (name) {
-                    localStorage.setItem('arbuzers_profile', name);
-                    profileDisplay.textContent = '👤 ' + name;
-                    profileName.value = '';
-                }
-            });
-
-            loadProfile();
-
-            // ===== ПЕРЕВОД =====
-            const transferName = document.getElementById('transferName');
-            const transferAmount = document.getElementById('transferAmount');
-            const transferBtn = document.getElementById('transferBtn');
-            const transferStatus = document.getElementById('transferStatus');
-
-            transferBtn.addEventListener('click', () => {
-                if (!isLoggedIn) return;
-                const name = transferName.value.trim();
-                const amount = parseInt(transferAmount.value);
-                if (!name || !amount || amount <= 0) {
-                    transferStatus.textContent = '❌ Введите имя и сумму!';
-                    return;
-                }
-                if (amount > clickerMoney) {
-                    transferStatus.textContent = '❌ Недостаточно 🍉!';
-                    return;
-                }
-                clickerMoney -= amount;
-                updateClickerUI();
-                transferStatus.textContent = '✅ Переведено ' + amount + ' 🍉 пользователю ' + name;
-                transferName.value = '';
-                transferAmount.value = '';
-            });
-
-            // ===== АДМИН-ПАНЕЛЬ =====
-            document.getElementById('adminMoneyBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminMoneyUsername').value.trim();
-                const amount = parseInt(document.getElementById('adminMoneyAmount').value);
-                if (name && amount > 0) {
-                    alert('✅ Выдано ' + amount + ' 🍉 пользователю ' + name);
-                }
-            });
-
-            document.getElementById('adminBanBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminBanUsername').value.trim();
-                if (name) alert('🔨 Пользователь ' + name + ' забанен!');
-            });
-
-            document.getElementById('adminUnbanBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminBanUsername').value.trim();
-                if (name) alert('🔓 Пользователь ' + name + ' разбанен!');
-            });
-
-            document.getElementById('adminRoleBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminRoleUsername').value.trim();
-                if (name) alert('👑 Пользователь ' + name + ' стал админом!');
-            });
-
-            document.getElementById('adminUnroleBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminRoleUsername').value.trim();
-                if (name) alert('⬇️ Пользователь ' + name + ' лишён админки!');
-            });
-
-            document.getElementById('adminCommentBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminCommentUsername').value.trim();
-                if (name) alert('🔇 Пользователю ' + name + ' запрещены комментарии!');
-            });
-
-            document.getElementById('adminUncommentBtn').addEventListener('click', () => {
-                const name = document.getElementById('adminCommentUsername').value.trim();
-                if (name) alert('🔊 Пользователю ' + name + ' разрешены комментарии!');
-            });
-
-            document.getElementById('adminNewsBtn').addEventListener('click', () => {
-                const title = document.getElementById('adminNewsTitle').value.trim();
-                const content = document.getElementById('adminNewsContent').value.trim();
-                if (title && content) {
-                    alert('📰 Новость опубликована!\n\n' + title + '\n' + content);
-                }
-            });
-
-            document.getElementById('showMoreUsers').addEventListener('click', () => {
-                const list = document.getElementById('usersList');
-                const users = ['Кузя', 'Арбузер', 'Моника', 'Гость', 'Admin'];
-                list.innerHTML = users.map(u => '👤 ' + u).join('<br>');
-            });
-
-            // ===== ПОСТЫ =====
-            const posts = [
-                'Первый пост! Добро пожаловать в мир Арбузеров! 🍉',
-                'Второй пост: Скоро будет большое обновление сайта!',
-                'Третий пост: Арбузеры готовятся к новым рейдам...',
-                'Четвёртый пост: Код на сайт получили только избранные.'
-            ];
-            let currentPost = 0;
-            const postText = document.getElementById('postText');
-            const postCounter = document.getElementById('postCounter');
-            const prevPost = document.getElementById('prevPost');
-            const nextPost = document.getElementById('nextPost');
-
-            function updatePost() {
-                postText.textContent = posts[currentPost] || 'Пост не найден';
-                postCounter.textContent = (currentPost + 1) + ' / ' + posts.length;
-            }
-
-            prevPost.addEventListener('click', () => {
-                if (currentPost > 0) { currentPost--;
-                    updatePost(); }
-            });
-
-            nextPost.addEventListener('click', () => {
-                if (currentPost < posts.length - 1) { currentPost++;
-                    updatePost(); }
-            });
-
-            updatePost();
-
-            // ===== ЛИДЕРЫ =====
-            function updateLeaderboard() {
+        // ===== ЛИДЕРБОРД =====
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch('/api/leaderboard');
+                const data = await res.json();
                 const list = document.getElementById('leaderboardList');
-                const users = [
-                    { name: 'Кузя', score: 9999 },
-                    { name: 'Арбузер', score: 5000 },
-                    { name: 'Моника', score: 2500 },
-                    { name: 'Гость', score: 1000 },
-                    { name: 'Вы', score: clickerMoney }
-                ];
-                users.sort((a, b) => b.score - a.score);
-                list.innerHTML = users.map((u, i) => `
+                if (!data || data.length === 0) {
+                    list.innerHTML = '<div class="chat-empty">Пока нет лидеров</div>';
+                    return;
+                }
+                list.innerHTML = data.map((u, i) => `
                     <div class="leaderboard-item">
                         <span class="rank">${i + 1}</span>
                         <span class="name">${u.name}</span>
-                        <span class="score">${u.score}🍉</span>
+                        <span class="score">${u.money}🍉</span>
                     </div>
                 `).join('');
+            } catch (e) {
+                console.error('Ошибка загрузки лидерборда:', e);
             }
+        }
 
-            setInterval(updateLeaderboard, 5000);
-            updateLeaderboard();
-
-            // ===== МОБИЛЬНАЯ ВЕРСИЯ =====
-            if (window.innerWidth <= 550) {
-                document.body.classList.add('is-mobile');
+        // ===== ЧАТ =====
+        async function loadChat() {
+            try {
+                const res = await fetch('/api/messages');
+                const data = await res.json();
+                const container = document.getElementById('chatMessages');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="chat-empty">Пока нет сообщений. Будьте первым!</div>';
+                    return;
+                }
+                container.innerHTML = data.map(m => `
+                    <div class="chat-message">
+                        <span class="msg-user">${m.user}</span>: ${m.text}
+                        <span class="msg-time">${new Date(m.time).toLocaleString()}</span>
+                    </div>
+                `).join('');
+                container.scrollTop = container.scrollHeight;
+            } catch (e) {
+                console.error('Ошибка загрузки чата:', e);
             }
+        }
 
-            window.addEventListener('resize', () => {
-                if (window.innerWidth <= 550) {
-                    document.body.classList.add('is-mobile');
+        document.getElementById('chatBtn').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            try {
+                const res = await fetch('/api/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: currentUser.name, text })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    input.value = '';
+                    loadChat();
+                    // Отправляем через WebSocket
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({ type: 'chat', user: currentUser.name, text }));
+                    }
                 } else {
-                    document.body.classList.remove('is-mobile');
+                    alert(data.error || 'Ошибка');
+                }
+            } catch (e) {
+                console.error('Ошибка отправки:', e);
+            }
+        });
+
+        document.getElementById('chatInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('chatBtn').click();
+        });
+
+        // ===== WEBSOCKET =====
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = protocol + '//' + window.location.host;
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                console.log('🔗 WebSocket подключен');
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'chat') {
+                        loadChat();
+                    }
+                } catch (e) {
+                    console.error('Ошибка WebSocket:', e);
+                }
+            };
+
+            ws.onclose = () => {
+                console.log('🔌 WebSocket отключен');
+                setTimeout(connectWebSocket, 3000);
+            };
+        }
+
+        // ===== СЕКРЕТНАЯ КОМНАТА =====
+        document.getElementById('secretAccessBtn').addEventListener('click', () => {
+            const code = document.getElementById('secretPasswordInput').value.trim();
+            if (code === '2305') {
+                document.getElementById('secretAccessError').textContent = '';
+                document.getElementById('secretPasswordInput').value = '';
+                // Открываем секретную комнату
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.getElementById('tab-secret').classList.add('active');
+                document.body.classList.add('secret-bg');
+                backBtn.classList.add('visible');
+                sideMenu.classList.remove('open');
+                menuOverlay.classList.remove('active');
+            } else {
+                document.getElementById('secretAccessError').textContent = '❌ Неверный код';
+                document.getElementById('secretPasswordInput').value = '';
+            }
+        });
+
+        // ===== СЕКРЕТНЫЙ ОПРОС =====
+        async function loadSecretPoll() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch('/api/secret-poll/' + currentUser.name);
+                const data = await res.json();
+                const status = document.getElementById('secretPollStatus');
+                if (data.vote === 'yes') {
+                    document.getElementById('secretPollYes').classList.add('selected-yes');
+                    document.getElementById('secretPollYes').disabled = true;
+                    document.getElementById('secretPollNo').disabled = true;
+                    status.textContent = '✅ Вы выбрали: "Хорошо, я подумаю"';
+                    status.style.color = '#88dd88';
+                } else if (data.vote === 'no') {
+                    document.getElementById('secretPollNo').classList.add('selected-no');
+                    document.getElementById('secretPollYes').disabled = true;
+                    document.getElementById('secretPollNo').disabled = true;
+                    status.textContent = '❌ Вы выбрали: "Я уже все решил"';
+                    status.style.color = '#dd8888';
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки секретного опроса:', e);
+            }
+        }
+
+        document.getElementById('secretPollYes').addEventListener('click', async () => {
+            if (!currentUser) return;
+            try {
+                await fetch('/api/secret-poll', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: currentUser.name, vote: 'yes' })
+                });
+                loadSecretPoll();
+            } catch (e) {}
+        });
+
+        document.getElementById('secretPollNo').addEventListener('click', async () => {
+            if (!currentUser) return;
+            try {
+                await fetch('/api/secret-poll', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user: currentUser.name, vote: 'no' })
+                });
+                loadSecretPoll();
+            } catch (e) {}
+        });
+
+        // ===== ТАБЛИЦА ПОЛЬЗОВАТЕЛЕЙ (АДМИН) =====
+        async function loadUsersList() {
+            try {
+                const res = await fetch('/api/users');
+                const data = await res.json();
+                const container = document.getElementById('usersList');
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<div class="chat-empty">Нет пользователей</div>';
+                    return;
+                }
+                container.innerHTML = data.map(u => `
+                    <div class="user-row">
+                        <span>${u.name}</span>
+                        <span>
+                            ${u.admin === 1 ? '<span class="admin-tag">⭐ АДМИН</span>' : ''}
+                            ${u.banned === 1 ? '<span class="banned-tag">🚫 ЗАБАНЕН</span>' : ''}
+                            <span style="color:#66ff66;">${u.money}🍉</span>
+                        </span>
+                    </div>
+                `).join('');
+            } catch (e) {
+                console.error('Ошибка загрузки пользователей:', e);
+            }
+        }
+
+        document.getElementById('showMoreUsers').addEventListener('click', loadUsersList);
+
+        // ===== АДМИН-КОМАНДЫ =====
+        async function adminAction(endpoint, data) {
+            try {
+                data.admin = currentUser.name;
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('✅ Выполнено!');
+                    loadUsersList();
+                    loadLeaderboard();
+                    if (currentUser) {
+                        const userRes = await fetch('/api/user/' + currentUser.name);
+                        const userData = await userRes.json();
+                        if (userData && !userData.error) {
+                            currentUser = userData;
+                            updateUserInfo();
+                        }
+                    }
+                } else {
+                    alert('❌ ' + (result.error || 'Ошибка'));
+                }
+            } catch (e) {
+                alert('❌ Ошибка соединения');
+            }
+        }
+
+        document.getElementById('adminMoneyBtn').addEventListener('click', () => {
+            const target = document.getElementById('adminMoneyUsername').value.trim();
+            const amount = parseInt(document.getElementById('adminMoneyAmount').value);
+            if (!target || !amount || amount <= 0) return alert('Введите имя и сумму');
+            adminAction('/api/admin/money', { target, amount });
+        });
+
+        document.getElementById('adminBanBtn').addEventListener('click', () => {
+            const target = document.getElementById('adminBanUsername').value.trim();
+            if (!target) return alert('Введите имя');
+            adminAction('/api/admin/ban', { target });
+        });
+
+        document.getElementById('adminUnbanBtn').addEventListener('click', () => {
+            const target = document.getElementById('adminBanUsername').value.trim();
+            if (!target) return alert('Введите имя');
+            adminAction('/api/admin/unban', { target });
+        });
+
+        document.getElementById('adminRoleBtn').addEventListener('click', () => {
+            const target = document.getElementById('adminRoleUsername').value.trim();
+            if (!target) return alert('Введите имя');
+            adminAction('/api/admin/give-admin', { target });
+        });
+
+        document.getElementById('adminUnroleBtn').addEventListener('click', () => {
+            const target = document.getElementById('adminRoleUsername').value.trim();
+            if (!target) return alert('Введите имя');
+            adminAction('/api/admin/remove-admin', { target });
+        });
+
+        // ===== МАГАЗИН СКИНОВ =====
+        const SKINS = {
+            'арбуз': { icon: '🍉', price: 0 },
+            'голубика': { icon: '🫐', price: 100 },
+            'ананас': { icon: '🍍', price: 150 },
+            'клубника': { icon: '🍓', price: 200 },
+            'моника': { icon: '🍎', price: 500 }
+        };
+
+        let ownedSkins = [];
+
+        async function loadSkins() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch('/api/skins/' + currentUser.name);
+                const data = await res.json();
+                ownedSkins = data || [];
+                updateShop();
+            } catch (e) {
+                console.error('Ошибка загрузки скинов:', e);
+            }
+        }
+
+        function updateShop() {
+            const cards = document.querySelectorAll('.skin-card');
+            cards.forEach(card => {
+                const skin = card.dataset.skin;
+                const isOwned = ownedSkins.includes(skin);
+                const isSelected = currentUser && currentUser.skin === skin;
+
+                card.classList.remove('owned', 'selected');
+                if (isOwned) card.classList.add('owned');
+                if (isSelected) card.classList.add('selected');
+
+                const btn = card.querySelector('.buy-btn');
+                if (isOwned) {
+                    btn.textContent = isSelected ? '✅ Выбрано' : 'Выбрать';
+                } else {
+                    btn.textContent = 'Купить';
                 }
             });
+        }
 
-            passwordInput.focus();
+        document.querySelectorAll('.buy-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                if (!currentUser) return;
+                const skin = btn.dataset.skin;
+                const price = SKINS[skin].price;
 
+                if (ownedSkins.includes(skin)) {
+                    // Выбрать скин
+                    try {
+                        await fetch('/api/select-skin', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ user: currentUser.name, skin })
+                        });
+                        currentUser.skin = skin;
+                        await updateUserData();
+                        loadSkins();
+                    } catch (e) {
+                        alert('Ошибка выбора скина');
+                    }
+                    return;
+                }
+
+                // Купить скин
+                try {
+                    const res = await fetch('/api/buy-skin', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user: currentUser.name, skin, price })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        currentUser.money = data.newMoney;
+                        updateUserInfo();
+                        loadSkins();
+                    } else {
+                        alert(data.error || 'Ошибка покупки');
+                    }
+                } catch (e) {
+                    alert('Ошибка соединения');
+                }
+            });
         });
+
+        // ===== ИГРА =====
+        const gameCells = document.querySelectorAll('.game-cell');
+        const gameScoreEl = document.getElementById('gameScore');
+        const gameResetBtn = document.getElementById('gameReset');
+        let gameScore = 0;
+        let gameActive = true;
+
+        function startGame() {
+            gameActive = true;
+            gameCells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('win');
+                cell.style.background = '#1a1a1a';
+            });
+            const randomIndex = Math.floor(Math.random() * 9);
+            setTimeout(() => {
+                if (gameActive) {
+                    gameCells[randomIndex].textContent = '🍉';
+                    gameCells[randomIndex].style.background = '#2a2a00';
+                }
+            }, 500);
+        }
+
+        gameCells.forEach((cell, index) => {
+            cell.addEventListener('click', () => {
+                if (!currentUser || !gameActive) return;
+                if (cell.textContent === '🍉') {
+                    gameScore += 10;
+                    gameScoreEl.textContent = gameScore;
+                    cell.classList.add('win');
+                    cell.textContent = '🎉';
+                    gameActive = false;
+                    setTimeout(startGame, 1500);
+                } else {
+                    cell.style.background = '#2a0000';
+                    setTimeout(() => { cell.style.background = '#1a1a1a'; }, 300);
+                }
+            });
+        });
+
+        gameResetBtn.addEventListener('click', () => {
+            gameScore = 0;
+            gameScoreEl.textContent = '0';
+            startGame();
+        });
+
+        startGame();
+
+        // ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+        const menuItems = document.querySelectorAll('.menu-item');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menuItems.forEach(i => i.classList.remove('active'));
+                tabContents.forEach(t => t.classList.remove('active'));
+
+                this.classList.add('active');
+                const tabId = this.dataset.tab;
+                const targetTab = document.getElementById('tab-' + tabId);
+                if (targetTab) targetTab.classList.add('active');
+
+                menuBtn.classList.remove('open');
+                sideMenu.classList.remove('open');
+                menuOverlay.classList.remove('active');
+
+                backBtn.classList.add('visible');
+
+                if (tabId === 'secret') {
+                    document.body.classList.add('secret-bg');
+                } else {
+                    document.body.classList.remove('secret-bg');
+                }
+
+                // Обновляем данные при переходе
+                if (tabId === 'leaders') loadLeaderboard();
+                if (tabId === 'chat') loadChat();
+                if (tabId === 'admin') loadUsersList();
+            });
+        });
+
+        // ===== КНОПКА НАЗАД =====
+        backBtn.addEventListener('click', () => {
+            menuItems.forEach(i => i.classList.remove('active'));
+            tabContents.forEach(t => t.classList.remove('active'));
+
+            const homeTab = document.getElementById('tab-home');
+            const homeItem = document.querySelector('[data-tab="home"]');
+            if (homeTab) homeTab.classList.add('active');
+            if (homeItem) homeItem.classList.add('active');
+
+            backBtn.classList.add('visible');
+            document.body.classList.remove('secret-bg');
+        });
+
+        // ===== МЕНЮ =====
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('open');
+            sideMenu.classList.toggle('open');
+            menuOverlay.classList.toggle('active');
+        });
+
+        menuOverlay.addEventListener('click', () => {
+            menuBtn.classList.remove('open');
+            sideMenu.classList.remove('open');
+            menuOverlay.classList.remove('active');
+        });
+
+        // ===== ФЕЙЕРВЕРК =====
+        let fireworksActive = false;
+        let fwCanvas, fwCtx, particles = [];
+
+        function launchFireworks() {
+            if (fireworksActive) return;
+            fireworksActive = true;
+            fwCanvas = document.getElementById('fireworksCanvas');
+            fwCanvas.width = window.innerWidth;
+            fwCanvas.height = window.innerHeight;
+            fwCtx = fwCanvas.getContext('2d');
+            const colors = ['#ff4444', '#66ff66', '#ffaa00', '#ff66ff', '#44ddff', '#ff3333', '#88ff88'];
+            const count = 80;
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                const x = Math.random() * fwCanvas.width;
+                const y = Math.random() * fwCanvas.height * 0.6 + fwCanvas.height * 0.1;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed * (Math.random() * 0.8 + 0.2),
+                    vy: Math.sin(angle) * speed * (Math.random() * 0.8 + 0.2) - 2,
+                    life: 1,
+                    decay: Math.random() * 0.015 + 0.005,
+                    size: Math.random() * 4 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)]
+                });
+            }
+            let frame = 0;
+
+            function drawFireworks() {
+                if (particles.length === 0 || frame > 120) {
+                    fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                    fireworksActive = false;
+                    particles = [];
+                    return;
+                }
+                fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.06;
+                    p.life -= p.decay;
+                    if (p.life <= 0) {
+                        particles.splice(i, 1);
+                        continue;
+                    }
+                    fwCtx.globalAlpha = p.life;
+                    fwCtx.beginPath();
+                    fwCtx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                    fwCtx.fillStyle = p.color;
+                    fwCtx.fill();
+                    fwCtx.shadowColor = p.color;
+                    fwCtx.shadowBlur = 20;
+                    fwCtx.fill();
+                    fwCtx.shadowBlur = 0;
+                }
+                fwCtx.globalAlpha = 1;
+                frame++;
+                requestAnimationFrame(drawFireworks);
+            }
+            drawFireworks();
+            setTimeout(() => {
+                fireworksActive = false;
+                particles = [];
+                if (fwCtx) fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+            }, 5000);
+        }
+
+        window.launchFireworks = launchFireworks;
+
+        // ===== ПАСХАЛКА 1987 (FNAF) =====
+        let fnafTriggered = false;
+        let keyBuffer = '';
+
+        function playFnafMusic() {
+            if (fnafTriggered || !currentUser) return;
+            fnafTriggered = true;
+            try {
+                const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                const notes = [
+                    { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
+                    { freq: 466.16, dur: 0.2 }, { freq: 466.16, dur: 0.2 },
+                    { freq: 466.16, dur: 0.4 }, { freq: 415.30, dur: 0.2 },
+                    { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.2 },
+                    { freq: 415.30, dur: 0.2 }, { freq: 415.30, dur: 0.4 },
+                    { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
+                    { freq: 369.99, dur: 0.2 }, { freq: 369.99, dur: 0.2 },
+                    { freq: 369.99, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                    { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                    { freq: 311.13, dur: 0.4 }, { freq: 311.13, dur: 0.4 },
+                    { freq: 311.13, dur: 0.4 }, { freq: 466.16, dur: 0.15 },
+                    { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.15 },
+                    { freq: 466.16, dur: 0.15 }, { freq: 466.16, dur: 0.3 },
+                    { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
+                    { freq: 415.30, dur: 0.15 }, { freq: 415.30, dur: 0.15 },
+                    { freq: 415.30, dur: 0.3 }, { freq: 369.99, dur: 0.15 },
+                    { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.15 },
+                    { freq: 369.99, dur: 0.15 }, { freq: 369.99, dur: 0.3 },
+                    { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                    { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                    { freq: 311.13, dur: 0.3 }, { freq: 311.13, dur: 0.3 },
+                ];
+                let time = 0;
+                notes.forEach(note => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.value = note.freq;
+                    gain.gain.setValueAtTime(0.12, audioCtx.currentTime + time);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + time + note.dur);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + time);
+                    osc.stop(audioCtx.currentTime + time + note.dur);
+                    time += note.dur + 0.01;
+                });
+                showFnafScreen();
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        function showFnafScreen() {
+            const div = document.createElement('div');
+            div.className = 'fnaf-error-screen';
+            div.innerHTML = `
+                <h2>⚠️ ERROR</h2>
+                <p>POWER OUTAGE • 1987</p>
+                <p style="font-size:0.8rem; margin-top:30px; opacity:0.4;">🔴 • 🔴 • 🔴</p>
+            `;
+            document.body.appendChild(div);
+            setTimeout(() => {
+                div.style.animation = 'fnafFlicker 0.2s ease 8';
+            }, 100);
+            setTimeout(() => {
+                div.remove();
+            }, 5000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!currentUser || fnafTriggered) return;
+            if (e.key >= '0' && e.key <= '9') {
+                keyBuffer += e.key;
+                if (keyBuffer.length > 4) keyBuffer = keyBuffer.slice(-4);
+                if (keyBuffer === '1987') {
+                    playFnafMusic();
+                    keyBuffer = '';
+                }
+            } else {
+                keyBuffer = '';
+            }
+        });
+
+        document.addEventListener('input', (e) => {
+            if (!currentUser || fnafTriggered) return;
+            const val = e.target.value;
+            if (typeof val === 'string' && val.includes('1987')) {
+                playFnafMusic();
+                e.target.value = val.replace('1987', '');
+            }
+        });
+
+        // ===== МОБИЛЬНАЯ ВЕРСИЯ =====
+        if (window.innerWidth <= 550) {
+            document.body.classList.add('is-mobile');
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 550) {
+                document.body.classList.add('is-mobile');
+            } else {
+                document.body.classList.remove('is-mobile');
+            }
+        });
+
+        // Фокус на поле имени
+        authName.focus();
+
+        console.log('🍉 ARBUZERS SECRETS загружен!');
+        console.log('🔑 Пароль: 3417 (только для входа на сайт)');
+        console.log('🔮 Секретная комната: 2305');
+        console.log('🎵 Пасхалка FNAF: 1987');
     </script>
 
 </body>
-</html>
+    </html>
