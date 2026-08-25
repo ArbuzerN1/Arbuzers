@@ -2013,7 +2013,8 @@
             document.getElementById('pollError').textContent = '[ERROR] : ВЫ ВЫБРАЛИ НЕПРАВИЛЬНЫЙ ОТВЕТ 😵';
         });
 
-        // ===== ЛИДЕРБОРД =====        async function loadLeaderboard() {
+        // ===== ЛИДЕРБОРД =====
+        async function loadLeaderboard() {
             try {
                 const res = await fetch('/api/leaderboard');
                 const data = await res.json();
@@ -2184,6 +2185,9 @@
                     document.getElementById('postTitle').value = '';
                     document.getElementById('postContent').value = '';
                     loadPosts();
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({ type: 'post' }));
+                    }
                 } else {
                     alert(data.error || 'Ошибка создания записи');
                 }
@@ -2767,4 +2771,4 @@
     </script>
 
 </body>
-    </html> 
+</html>
