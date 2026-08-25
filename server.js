@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 3000;
 // ===== БАЗА ДАННЫХ =====
 const db = new sqlite3.Database('./database.db');
 
-// Создаём таблицы
 db.serialize(() => {
     // Пользователи
     db.run(`CREATE TABLE IF NOT EXISTS users (
@@ -33,11 +32,20 @@ db.serialize(() => {
         vote TEXT
     )`);
 
-    // Комментарии/чат
+    // Сообщения чата
     db.run(`CREATE TABLE IF NOT EXISTS messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user TEXT,
         text TEXT,
+        time INTEGER
+    )`);
+
+    // Записи (посты)
+    db.run(`CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        author TEXT,
+        title TEXT,
+        content TEXT,
         time INTEGER
     )`);
 
@@ -46,14 +54,6 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user TEXT UNIQUE,
         vote TEXT
-    )`);
-
-    // Новости
-    db.run(`CREATE TABLE IF NOT EXISTS news (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT,
-        content TEXT,
-        time INTEGER
     )`);
 
     // Скины пользователей
@@ -78,19 +78,16 @@ app.post('/api/auth', (req, res) => {
     const { name, password } = req.body;
     if (!name || !password) return res.json({ error: 'Введите имя и пароль' });
 
-    // Проверяем, есть ли пользователь
     db.get('SELECT * FROM users WHERE name = ?', [name], (err, user) => {
         if (err) return res.json({ error: err.message });
 
         if (user) {
-            // Проверяем пароль
             if (user.password === password) {
                 res.json({ success: true, user });
             } else {
                 res.json({ error: 'Неверный пароль' });
             }
         } else {
-            // Создаём нового пользователя
             db.run('INSERT INTO users (name, password) VALUES (?, ?)', [name, password], function(err) {
                 if (err) return res.json({ error: 'Имя уже занято' });
                 db.get('SELECT * FROM users WHERE name = ?', [name], (err, newUser) => {
@@ -145,12 +142,10 @@ app.post('/api/buy-skin', (req, res) => {
     const { user, skin, price } = req.body;
     if (!user || !skin) return res.json({ error: 'Недостаточно данных' });
 
-    // Проверяем, есть ли уже такой скин
     db.get('SELECT * FROM user_skins WHERE user = ? AND skin = ?', [user, skin], (err, existing) => {
         if (err) return res.json({ error: err.message });
         if (existing) return res.json({ error: 'Скин уже куплен' });
 
-        // Проверяем деньги
         db.get('SELECT money FROM users WHERE name = ?', [user], (err, userData) => {
             if (err) return res.json({ error: err.message });
             if (!userData) return res.json({ error: 'Пользователь не найден' });
@@ -159,11 +154,9 @@ app.post('/api/buy-skin', (req, res) => {
                 return res.json({ error: 'Недостаточно денег' });
             }
 
-            // Покупаем скин
             db.run('INSERT INTO user_skins (user, skin) VALUES (?, ?)', [user, skin], (err) => {
                 if (err) return res.json({ error: err.message });
 
-                // Списываем деньги
                 const newMoney = userData.money - price;
                 db.run('UPDATE users SET money = ? WHERE name = ?', [newMoney, user], (err) => {
                     if (err) return res.json({ error: err.message });
@@ -188,7 +181,6 @@ app.post('/api/select-skin', (req, res) => {
     const { user, skin } = req.body;
     if (!user || !skin) return res.json({ error: 'Недостаточно данных' });
 
-    // Проверяем, есть ли такой скин у пользователя
     db.get('SELECT * FROM user_skins WHERE user = ? AND skin = ?', [user, skin], (err, existing) => {
         if (err) return res.json({ error: err.message });
         if (!existing) return res.json({ error: 'Скин не куплен' });
@@ -223,7 +215,7 @@ app.post('/api/poll', (req, res) => {
     });
 });
 
-// --- Комментарии/чат ---
+// --- Сообщения чата ---
 app.get('/api/messages', (req, res) => {
     db.all('SELECT * FROM messages ORDER BY time DESC LIMIT 100', (err, rows) => {
         if (err) return res.json({ error: err.message });
@@ -235,7 +227,6 @@ app.post('/api/messages', (req, res) => {
     const { user, text } = req.body;
     if (!user || !text) return res.json({ error: 'Недостаточно данных' });
 
-    // Проверяем, не забанен ли
     db.get('SELECT banned FROM users WHERE name = ?', [user], (err, userData) => {
         if (err) return res.json({ error: err.message });
         if (userData && userData.banned === 1) {
@@ -246,6 +237,116 @@ app.post('/api/messages', (req, res) => {
             if (err) return res.json({ error: err.message });
             res.json({ success: true });
         });
+    });
+});
+
+// --- Удалить сообщение ---
+app.delete('/api/messages/:id', (req, res) => {
+    const { id } = req.params;
+    const { user } = req.body;
+    if (!user) return res.json({ error: 'Недостаточно данных' });
+
+    db.get('SELECT user FROM messages WHERE id = ?', [id], (err, msg) => {
+        if (err) return res.json({ error: err.message });
+        if (!msg) return res.json({ error: 'Сообщение не найдено' });
+
+        const canDelete = (msg.user === user);
+        if (!canDelete) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                deleteMsg();
+            });
+        } else {
+            deleteMsg();
+        }
+
+        function deleteMsg() {
+            db.run('DELETE FROM messages WHERE id = ?', [id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
+    });
+});
+
+// --- Записи (посты) ---
+app.get('/api/posts', (req, res) => {
+    db.all('SELECT * FROM posts ORDER BY time DESC', (err, rows) => {
+        if (err) return res.json({ error: err.message });
+        res.json(rows || []);
+    });
+});
+
+app.post('/api/posts', (req, res) => {
+    const { author, title, content } = req.body;
+    if (!author || !title || !content) return res.json({ error: 'Недостаточно данных' });
+
+    db.run('INSERT INTO posts (author, title, content, time) VALUES (?, ?, ?, ?)',
+        [author, title, content, Date.now()], (err) => {
+            if (err) return res.json({ error: err.message });
+            res.json({ success: true });
+        });
+});
+
+app.put('/api/posts/:id', (req, res) => {
+    const { id } = req.params;
+    const { user, title, content } = req.body;
+    if (!user || !title || !content) return res.json({ error: 'Недостаточно данных' });
+
+    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
+        if (err) return res.json({ error: err.message });
+        if (!post) return res.json({ error: 'Запись не найдена' });
+
+        const canEdit = (post.author === user);
+        if (!canEdit) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                updatePost();
+            });
+        } else {
+            updatePost();
+        }
+
+        function updatePost() {
+            db.run('UPDATE posts SET title = ?, content = ? WHERE id = ?', [title, content, id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
+    });
+});
+
+app.delete('/api/posts/:id', (req, res) => {
+    const { id } = req.params;
+    const { user } = req.body;
+    if (!user) return res.json({ error: 'Недостаточно данных' });
+
+    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
+        if (err) return res.json({ error: err.message });
+        if (!post) return res.json({ error: 'Запись не найдена' });
+
+        const canDelete = (post.author === user);
+        if (!canDelete) {
+            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
+                if (err || !userData || userData.admin !== 1) {
+                    return res.json({ error: 'Нет прав' });
+                }
+                deletePost();
+            });
+        } else {
+            deletePost();
+        }
+
+        function deletePost() {
+            db.run('DELETE FROM posts WHERE id = ?', [id], (err) => {
+                if (err) return res.json({ error: err.message });
+                res.json({ success: true });
+            });
+        }
     });
 });
 
@@ -281,32 +382,6 @@ app.post('/api/secret-poll', (req, res) => {
     db.run('INSERT OR REPLACE INTO secret_poll (user, vote) VALUES (?, ?)', [user, vote], (err) => {
         if (err) return res.json({ error: err.message });
         res.json({ success: true });
-    });
-});
-
-// --- Новости ---
-app.get('/api/news', (req, res) => {
-    db.all('SELECT * FROM news ORDER BY time DESC', (err, rows) => {
-        if (err) return res.json({ error: err.message });
-        res.json(rows || []);
-    });
-});
-
-app.post('/api/news', (req, res) => {
-    const { title, content, user } = req.body;
-    if (!title || !content) return res.json({ error: 'Недостаточно данных' });
-
-    // Проверяем админа
-    db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
-        if (err) return res.json({ error: err.message });
-        if (!userData || userData.admin !== 1) {
-            return res.json({ error: 'Нет прав' });
-        }
-
-        db.run('INSERT INTO news (title, content, time) VALUES (?, ?, ?)', [title, content, Date.now()], (err) => {
-            if (err) return res.json({ error: err.message });
-            res.json({ success: true });
-        });
     });
 });
 
@@ -394,111 +469,6 @@ app.post('/api/admin/remove-admin', (req, res) => {
     });
 });
 
-// Таблица записей
-db.run(`CREATE TABLE IF NOT EXISTS posts (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    author TEXT,
-    title TEXT,
-    content TEXT,
-    time INTEGER
-)`);
-
-// === API для записей ===
-app.get('/api/posts', (req, res) => {
-    db.all('SELECT * FROM posts ORDER BY time DESC', (err, rows) => {
-        if (err) return res.json({ error: err.message });
-        res.json(rows || []);
-    });
-});
-
-app.post('/api/posts', (req, res) => {
-    const { author, title, content } = req.body;
-    if (!author || !title || !content) return res.json({ error: 'Недостаточно данных' });
-    db.run('INSERT INTO posts (author, title, content, time) VALUES (?, ?, ?, ?)',
-        [author, title, content, Date.now()], (err) => {
-            if (err) return res.json({ error: err.message });
-            res.json({ success: true });
-        });
-});
-
-app.put('/api/posts/:id', (req, res) => {
-    const { id } = req.params;
-    const { user, title, content } = req.body;
-    if (!user || !title || !content) return res.json({ error: 'Недостаточно данных' });
-    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
-        if (err) return res.json({ error: err.message });
-        if (!post) return res.json({ error: 'Запись не найдена' });
-        if (post.author !== user) {
-            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
-                if (err || !userData || userData.admin !== 1) {
-                    return res.json({ error: 'Нет прав' });
-                }
-                updatePost();
-            });
-        } else {
-            updatePost();
-        }
-        function updatePost() {
-            db.run('UPDATE posts SET title = ?, content = ? WHERE id = ?', [title, content, id], (err) => {
-                if (err) return res.json({ error: err.message });
-                res.json({ success: true });
-            });
-        }
-    });
-});
-
-app.delete('/api/posts/:id', (req, res) => {
-    const { id } = req.params;
-    const { user } = req.body;
-    if (!user) return res.json({ error: 'Недостаточно данных' });
-    db.get('SELECT author FROM posts WHERE id = ?', [id], (err, post) => {
-        if (err) return res.json({ error: err.message });
-        if (!post) return res.json({ error: 'Запись не найдена' });
-        if (post.author !== user) {
-            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
-                if (err || !userData || userData.admin !== 1) {
-                    return res.json({ error: 'Нет прав' });
-                }
-                deletePost();
-            });
-        } else {
-            deletePost();
-        }
-        function deletePost() {
-            db.run('DELETE FROM posts WHERE id = ?', [id], (err) => {
-                if (err) return res.json({ error: err.message });
-                res.json({ success: true });
-            });
-        }
-    });
-});
-
-// === Удаление сообщений в чате ===
-app.delete('/api/messages/:id', (req, res) => {
-    const { id } = req.params;
-    const { user } = req.body;
-    if (!user) return res.json({ error: 'Недостаточно данных' });
-    db.get('SELECT user FROM messages WHERE id = ?', [id], (err, msg) => {
-        if (err) return res.json({ error: err.message });
-        if (!msg) return res.json({ error: 'Сообщение не найдено' });
-        if (msg.user !== user) {
-            db.get('SELECT admin FROM users WHERE name = ?', [user], (err, userData) => {
-                if (err || !userData || userData.admin !== 1) {
-                    return res.json({ error: 'Нет прав' });
-                }
-                deleteMsg();
-            });
-        } else {
-            deleteMsg();
-        }
-        function deleteMsg() {
-            db.run('DELETE FROM messages WHERE id = ?', [id], (err) => {
-                if (err) return res.json({ error: err.message });
-                res.json({ success: true });
-            });
-        }
-    });
-});
 // ===== ГЛАВНАЯ СТРАНИЦА =====
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
@@ -520,7 +490,6 @@ wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         try {
             const data = JSON.parse(message);
-            // Отправляем всем клиентам
             clients.forEach(client => {
                 if (client !== ws && client.readyState === WebSocket.OPEN) {
                     client.send(JSON.stringify(data));
